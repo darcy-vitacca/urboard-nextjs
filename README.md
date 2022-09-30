@@ -1,5 +1,8 @@
 [] - Setup planetscale
-[] - Setup google provider
+[] - Setup google provider nextauth
+[] - Add tRPC router
+[] - Add file router
+[] - Add folder router
 [] - Home page
 [] - Add folder page
 [] - Create folder schema
