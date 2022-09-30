@@ -1,13 +1,17 @@
 import type { NextPage } from "next";
 import Head from "next/head";
 import { trpc } from "../utils/trpc";
+import Image from "next/image";
 import { useSession, signIn, signOut } from "next-auth/react";
 
 const Home: NextPage = (props) => {
-  const { data: session } = useSession();
-  const hello = trpc.useQuery(["example.hello", { text: "from tRPC" }]);
+  const { data: session, status } = useSession();
 
   console.log("session", session);
+  console.log("status", status);
+  if (status === "loading") {
+    return <div>Loading...</div>;
+  }
 
   return (
     <>
@@ -18,10 +22,22 @@ const Home: NextPage = (props) => {
       </Head>
       {session ? (
         <>
-          Signed in as {session?.user?.email} <br />
+          <h1>{session?.user?.name}</h1>
+          <p>
+            Signed in as {session?.user?.email} <br />
+          </p>
           <button className="btn" onClick={() => signOut()}>
             Sign out
           </button>
+          {session?.user?.image ? (
+            <Image
+              className="rounded-full"
+              src={session?.user?.image}
+              width={50}
+              height={50}
+              alt="User image"
+            />
+          ) : null}
         </>
       ) : (
         <>
