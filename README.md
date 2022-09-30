@@ -1,4 +1,4 @@
-[] - Setup planetscale
+[X] - Setup planetscale
 [] - Setup google provider nextauth
 [] - Add tRPC router
 [] - Add file router
