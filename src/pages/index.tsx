@@ -7,6 +7,8 @@ const Home: NextPage = (props) => {
   const { data: session } = useSession();
   const hello = trpc.useQuery(["example.hello", { text: "from tRPC" }]);
 
+  console.log("session", session);
+
   return (
     <>
       <Head>
