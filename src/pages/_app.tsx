@@ -9,15 +9,17 @@ import type { AppRouter } from "../server/router";
 import type { Session } from "next-auth";
 import "../styles/globals.css";
 
+import Layout from "../components/layout";
+
 const MyApp: AppType<{ session: Session | null }> = ({
   Component,
   pageProps: { session, ...pageProps },
 }) => {
   return (
     <SessionProvider session={session}>
-      <div className="container">
+      <Layout>
         <Component {...pageProps} />
-      </div>
+      </Layout>
     </SessionProvider>
   );
 };

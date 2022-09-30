@@ -4,6 +4,7 @@
 [X] - Add Folder page \
 [X] - Add Link page \
 [] - Add Layout \
+[] - Add SideBar \
 [] - Add Inputs to both pages 
 
 
