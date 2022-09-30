@@ -17,12 +17,16 @@ const Home: NextPage = (props) => {
       {session ? (
         <>
           Signed in as {session?.user?.email} <br />
-          <button onClick={() => signOut()}>Sign out</button>
+          <button className="btn" onClick={() => signOut()}>
+            Sign out
+          </button>
         </>
       ) : (
         <>
           Not signed in <br />
-          <button onClick={() => signIn()}>Sign in</button>
+          <button className="btn" onClick={() => signIn()}>
+            Sign in
+          </button>
         </>
       )}
 

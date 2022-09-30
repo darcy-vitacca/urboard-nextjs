@@ -1,6 +1,6 @@
 [X] - Setup planetscale
 [X] - Setup google provider nextauth
-[] - Add daisy UI
+[X] - Add daisy UI
 [] - Add tRPC router
 [] - Add file router
 [] - Add folder router
