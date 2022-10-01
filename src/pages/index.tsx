@@ -1,16 +1,17 @@
 import type { NextPage } from "next";
 import Head from "next/head";
-import { trpc } from "../utils/trpc";
 import Image from "next/image";
 import { useSession, signIn, signOut } from "next-auth/react";
+import { AuthStatus } from "../types/next-auth";
 
 const Home: NextPage = (props) => {
   const { data: session, status } = useSession();
 
   console.log("session", session);
   console.log("status", status);
-  if (status === "loading") {
-    return <div>Loading...</div>;
+
+  if (status === AuthStatus.LOADING) {
+    return <p>Loading ...</p>;
   }
 
   return (
