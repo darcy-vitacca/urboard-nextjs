@@ -10,3 +10,10 @@ declare module "next-auth" {
     } & DefaultSession["user"];
   }
 }
+
+
+enum AuthStatus {
+  LOADING = "loading",
+  AUTHENTICATED = "authenticated",
+  UNAUTHENTICATED = "unauthenticated",
+}

@@ -4,7 +4,7 @@ import Image from "next/image";
 import { useSession, signIn, signOut } from "next-auth/react";
 import { AuthStatus } from "../types/next-auth";
 
-const Home: NextPage = (props) => {
+const Home: NextPage = () => {
   const { data: session, status } = useSession();
 
   console.log("session", session);
