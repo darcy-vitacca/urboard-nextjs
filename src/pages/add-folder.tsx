@@ -7,13 +7,18 @@ import {
   createFolderValidator,
 } from "../validators/create-folder-validator";
 import { Input } from "../components/input/input";
+import { trpc } from "../utils/trpc";
+import { Spinner } from "../components/spinner/spinner";
+import { useRouter } from "next/router";
 
-const AddFolder = () => {
+const AddFolder = (props) => {
+  const router = useRouter();
   const {
     handleSubmit,
     formState: { errors },
     register,
     watch,
+    reset,
   } = useForm<CreateFolderInputType>({
     defaultValues: {
       name: "",
@@ -22,11 +27,27 @@ const AddFolder = () => {
     resolver: zodResolver(createFolderValidator),
   });
 
-  const onSubmit: SubmitHandler<CreateFolderInputType> = (data) =>
-    console.log(data);
+  const { mutate, isLoading, data } = trpc.useMutation(
+    "protected.create-folder",
+    {
+      onSuccess: (data) => {
+        debugger;
+        reset();
+        router.push(`/folder/${data?.id}`);
+      },
+    }
+  );
+
+  const onSubmit: SubmitHandler<CreateFolderInputType> = (data) => {
+    mutate(data);
+  };
 
   console.log("errors", errors);
   console.log("watch()", watch());
+
+  if (isLoading) {
+    return <Spinner />;
+  }
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
