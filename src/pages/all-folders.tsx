@@ -15,7 +15,7 @@ import { Spinner } from "../components/spinner/spinner";
 //   return <div>Folder {id}</div>;
 // };
 
-const FolderPage: FC = (props) => {
+const FolderPage: FC = () => {
   const { query } = useRouter();
   const { id } = query;
   if (!id || typeof id != "string") return <div>No id</div>;
