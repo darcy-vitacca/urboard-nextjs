@@ -12,8 +12,3 @@ declare module "next-auth" {
 }
 
 
-enum AuthStatus {
-  LOADING = "loading",
-  AUTHENTICATED = "authenticated",
-  UNAUTHENTICATED = "unauthenticated",
-}

@@ -2,16 +2,17 @@ import type { NextPage } from "next";
 import Head from "next/head";
 import Image from "next/image";
 import { useSession, signIn, signOut } from "next-auth/react";
-import { AuthStatus } from "../types/next-auth";
+import { AuthStatus } from "../types/custom-next-auth";
+import { Spinner } from "../components/spinner/spinner";
 
-const Home: NextPage = () => {
+const Home: NextPage = (props) => {
   const { data: session, status } = useSession();
 
   console.log("session", session);
   console.log("status", status);
 
   if (status === AuthStatus.LOADING) {
-    return <p>Loading ...</p>;
+    return <Spinner />;
   }
 
   return (

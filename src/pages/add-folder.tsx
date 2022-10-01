@@ -6,7 +6,6 @@ export type IFormInputs = {
   name: string;
   test: string;
 };
-
 const AddFolder = () => {
   const {
     handleSubmit,
