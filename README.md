@@ -17,8 +17,11 @@
 [X] - Create folder schema \
 [X] - Create link schema \
 [X] - Fetch folders on home \
-[] - Fetch links on folders and cache 
+[] - Create cards for home \
+[] - Add vercel
+[] - Reorder of folders
 
+[] - Fetch links on folders and cache 
 [] - Search \
 [] - Edit folders and links \
 [] - Delete links and folders 

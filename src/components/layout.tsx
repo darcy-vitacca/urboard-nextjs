@@ -5,9 +5,9 @@ type ILayout = { children: ReactNode };
 
 const Layout: FC<ILayout> = ({ children }) => {
   return (
-    <div className="flex min-w-[320px] flex-row">
+    <div className="flex w-full min-w-[320px] flex-row">
       <Sidebar />
-      <div className="i mt-32 flex w-full items-start justify-center ">
+      <div className="mt-32 flex w-full items-start justify-center ">
         {children}
       </div>
     </div>

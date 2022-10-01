@@ -27,31 +27,23 @@ const AddFolder = (props) => {
     resolver: zodResolver(createFolderValidator),
   });
 
-  const { mutate, isLoading, data } = trpc.useMutation(
-    "protected.create-folder",
-    {
-      onSuccess: (data) => {
-        debugger;
-        reset();
-        router.push(`/folder/${data?.id}`);
-      },
-    }
-  );
+  const { mutate, isLoading } = trpc.useMutation("protected.create-folder", {
+    onSuccess: (data) => {
+      reset();
+      router.push(`/folder/${data?.id}`);
+    },
+  });
 
   const onSubmit: SubmitHandler<CreateFolderInputType> = (data) => {
     mutate(data);
   };
-
-  console.log("errors", errors);
-  console.log("watch()", watch());
-
   if (isLoading) {
     return <Spinner />;
   }
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <h1 className="prose-xl">Add Folder</h1>
+      <h1 className="prose-xl font-bold">Add Folder</h1>
       <Input
         label="Folder Name"
         error={errors?.name?.message}

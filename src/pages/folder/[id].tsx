@@ -16,8 +16,12 @@ const FolderContent: FC<{ id: string }> = ({ id }) => {
     return <Spinner />;
   }
 
-  return <div>Folder {id} 
-  </div>;
+  return (
+    <div>
+      Folder {id}
+      <h1 className="prose-xl font-bold">{data?.name}</h1>
+    </div>
+  );
 };
 
 const FolderPage: FC = (props) => {
