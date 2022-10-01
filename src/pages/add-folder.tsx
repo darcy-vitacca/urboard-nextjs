@@ -13,10 +13,11 @@ const AddFolder = () => {
     handleSubmit,
     formState: { errors },
     register,
+    watch,
   } = useForm<CreateFolderInputType>({
     defaultValues: {
       name: "",
-      imageUrl: "",
+      imageUrl: undefined,
     },
     resolver: zodResolver(createFolderValidator),
   });
@@ -24,13 +25,16 @@ const AddFolder = () => {
   const onSubmit: SubmitHandler<CreateFolderInputType> = (data) =>
     console.log(data);
 
+  console.log("errors", errors);
+  console.log("watch()", watch());
+
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <h1>Add Folder</h1>
+      <h1 className="prose-xl">Add Folder</h1>
       <Input
         label="Folder Name"
-        {...register("name")}
         error={errors?.name?.message}
+        {...register("name")}
       />
 
       <button className="btn mt-4" type="submit">

@@ -1,25 +1,35 @@
-import { FC } from "react";
+import React from "react";
 
-type IInput = {
+type IInputProps = {
   label: string;
   placeholder?: string;
   error?: string;
-};
+} & React.DetailedHTMLProps<
+  React.InputHTMLAttributes<HTMLInputElement>,
+  HTMLInputElement
+>;
 
-export const Input: FC<IInput> = ({ label, placeholder, error, ...props }) => {
-  return (
-    <div className="flex w-full flex-row items-center">
-      <div className="form-control w-full">
-        <label className="label flex justify-between">
-          <span className="label-text">{label}</span>
-        </label>
-        <input
-          placeholder={placeholder}
-          className="input input-bordered"
-          {...props}
-        />
-        {error ? <p>{error}</p> : null}
+//Had to use a forwardRef because rhf register spread was losing the ref
+export const Input = React.forwardRef<HTMLInputElement, IInputProps>(
+  ({ name, label, error, ...props }, ref) => {
+    return (
+      <div className="flex w-full flex-row items-center">
+        <div className="form-control w-full">
+          <label className="label flex justify-between">
+            <span className="label-text">{label}</span>
+          </label>
+          <input
+            className="input input-bordered"
+            type="text"
+            ref={ref}
+            name={name}
+            {...props}
+          />
+          {error ? <p className="mt-1 text-red-400">{error}</p> : null}
+        </div>
       </div>
-    </div>
-  );
-};
+    );
+  }
+);
+
+Input.displayName = "Input";
