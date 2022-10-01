@@ -24,7 +24,7 @@ const FolderContent: FC<{ id: string }> = ({ id }) => {
   );
 };
 
-const FolderPage: FC = (props) => {
+const FolderPage: FC = () => {
   const { query } = useRouter();
   const { id } = query;
   if (!id || typeof id != "string") return <div>No id</div>;

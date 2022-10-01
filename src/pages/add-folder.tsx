@@ -11,7 +11,7 @@ import { trpc } from "../utils/trpc";
 import { Spinner } from "../components/spinner/spinner";
 import { useRouter } from "next/router";
 
-const AddFolder = (props) => {
+const AddFolder = () => {
   const router = useRouter();
   const {
     handleSubmit,

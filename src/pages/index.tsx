@@ -60,7 +60,7 @@ export const FolderCard: FC<{ name: string; folderId: string }> = ({
   );
 };
 
-const Home: NextPage = (props) => {
+const Home: NextPage = () => {
   const { data: session, status } = useSession();
 
   const { data, isLoading, error } = trpc.useQuery([
