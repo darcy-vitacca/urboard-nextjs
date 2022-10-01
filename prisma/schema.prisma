@@ -57,24 +57,29 @@ model VerificationToken {
 
 model Folder {
     id        String   @id @default(cuid())
-    name      String
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
+
     user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
     userId    String
-    imageUrl  String?
     links     Link[]
+
+    name      String
+    imageUrl  String?
+    index    Int @default(0)
 }
 
 model Link {
     id        String   @id @default(cuid())
-    name      String
-    url       String
-    imageUrl  String?
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
     folder    Folder   @relation(fields: [folderId], references: [id], onDelete: Cascade)
     folderId  String
     user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
     userId    String
+
+    name      String
+    imageUrl  String?
+    url       String
+    index    Int  @default(0)
 }
