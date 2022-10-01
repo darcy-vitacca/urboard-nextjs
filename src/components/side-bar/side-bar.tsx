@@ -16,7 +16,7 @@ const LinkWrapper = ({ href, children }: ILinkWrapper) => {
 type ITooltip = { toolTip: string };
 export const Tooltip: FC<ITooltip> = ({ toolTip }) => {
   return (
-    <span className="min-w-4 absolute left-full top-1/2 ml-4 -translate-y-1/2 rounded bg-gray-900 px-8 py-1.5 text-base font-medium text-white opacity-0 group-hover:opacity-100">
+    <span className="min-w-4 absolute left-full top-1/2 z-10 ml-4 -translate-y-1/2 rounded bg-gray-900 px-8 py-1.5 text-base font-medium text-white opacity-0 group-hover:opacity-100">
       {toolTip}
     </span>
   );

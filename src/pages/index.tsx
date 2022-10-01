@@ -6,41 +6,68 @@ import { AuthStatus } from "../types/custom-next-auth";
 import { Spinner } from "../components/spinner/spinner";
 import { trpc } from "../utils/trpc";
 import { FC } from "react";
+import { Session } from "next-auth";
+import Link from "next/link";
 
-export const FolderCard: FC<{ name: string }> = ({ name }) => {
+export const UserInfo: FC<{ session: Session | null }> = ({ session }) => {
   return (
-    <div className="card w-96 bg-base-100 shadow-xl">
-      <figure>
-        <img src="https://placeimg.com/400/225/arch" alt="Shoes" />
-      </figure>
-      <div className="card-body">
-        <h2 className="card-title">
-          {name}
-          <div className="badge badge-secondary">NEW</div>
-        </h2>
-        <p>If a dog chews shoes whose shoes does he choose?</p>
-        <div className="card-actions justify-end">
-          <div className="badge badge-outline">Fashion</div>
-          <div className="badge badge-outline">Products</div>
+    <div className="flex w-full">
+      <div className="w-48">
+        <div className="flex flex-row justify-between">
+          <div className="flex flex-col">
+            <h1 className="prose-xl">{session?.user?.name}</h1>
+            <p className="prose-md">{session?.user?.email}</p>
+          </div>
+        </div>
+        <div className="flex justify-between">
+          <button className="btn" onClick={() => signOut()}>
+            Sign out
+          </button>
+          {session?.user?.image ? (
+            <Image
+              className="rounded-full"
+              src={session?.user?.image}
+              width={50}
+              height={50}
+              alt="User image"
+            />
+          ) : null}
         </div>
       </div>
     </div>
   );
 };
 
+export const FolderCard: FC<{ name: string; folderId: string }> = ({
+  name,
+  folderId,
+}) => {
+  return (
+    <Link href={`/folder/${folderId}`}>
+      <div className="card h-60 w-60 cursor-pointer bg-base-100 shadow-xl">
+        <figure></figure>
+        <div className="card-body">
+          <h2 className="card-title">
+            {name}
+            <div className="badge badge-secondary">NEW</div>
+            <div>📁</div>
+          </h2>
+          <p>If a dog chews shoes whose shoes does he choose?</p>
+          <div className="card-actions justify-end"></div>
+        </div>
+      </div>
+    </Link>
+  );
+};
+
 const Home: NextPage = (props) => {
   const { data: session, status } = useSession();
-
-  console.log("session", session);
-  console.log("status", status);
 
   const { data, isLoading, error } = trpc.useQuery([
     "protected.get-my-folders",
   ]);
 
-  console.log("data", data);
-
-  if (status === AuthStatus.LOADING) {
+  if (status === AuthStatus.LOADING || isLoading) {
     return <Spinner />;
   }
 
@@ -53,29 +80,15 @@ const Home: NextPage = (props) => {
       </Head>
       <main>
         {session ? (
-          <div className="mx-4 flex w-full flex-col">
-            <div>
-              <h1>{session?.user?.name}</h1>
-              <p>
-                Signed in as {session?.user?.email} <br />
-              </p>
-              <button className="btn" onClick={() => signOut()}>
-                Sign out
-              </button>
-              {session?.user?.image ? (
-                <Image
-                  className="rounded-full"
-                  src={session?.user?.image}
-                  width={50}
-                  height={50}
-                  alt="User image"
-                />
-              ) : null}
-            </div>
-
+          <div className="ml-4 flex w-full flex-col">
+            <UserInfo session={session} />
             <div className="flex flex-wrap gap-4">
               {data?.map((folder) => (
-                <FolderCard key={folder?.id} name={folder?.name} />
+                <FolderCard
+                  key={folder?.id}
+                  name={folder?.name}
+                  folderId={folder?.id}
+                />
               ))}
             </div>
           </div>
