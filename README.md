@@ -17,11 +17,12 @@
 [X] - Fetch folders on home \
 [X] - Add into vercel
 
+[X] - Add Search bar UI
 [] - Update cards/folders for home \
 [] - Reorder of folders
 [] - Add Tags to schema
 [] - Add click count to schemas
-[] - 
+[] - Option to add description
 
 [] - Fetch links on folders and cache
 [] - Search \

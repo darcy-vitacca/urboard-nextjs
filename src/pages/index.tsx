@@ -8,6 +8,7 @@ import { trpc } from "../utils/trpc";
 import { FC } from "react";
 import { Session } from "next-auth";
 import Link from "next/link";
+import SearchBar from "../components/search/search";
 
 export const UserInfo: FC<{ session: Session | null }> = ({ session }) => {
   return (
@@ -44,7 +45,7 @@ export const FolderCard: FC<{ name: string; folderId: string }> = ({
 }) => {
   return (
     <Link href={`/folder/${folderId}`}>
-      <div className="card flex h-52  w-52 cursor-pointer items-center justify-center border bg-base-100 p-2 shadow-xl">
+      <div className=" card flex  h-52 w-52 cursor-pointer items-center justify-center border bg-base-100 p-2 shadow-xl hover:border-gray-900">
         <h1 className="r card-title">{name}</h1>
       </div>
     </Link>
@@ -69,50 +70,51 @@ const Home: NextPage = () => {
         <meta name="description" content="urboard" />
         {/* <link rel="icon" href="/favicon.ico" /> */}
       </Head>
-      <main>
-        {session ? (
-          <div className="ml-4 flex w-full flex-col ">
-            <UserInfo session={session} />
-            <div className="flex flex-wrap gap-4">
-              {data?.map((folder) => (
-                <FolderCard
-                  key={folder?.id}
-                  name={folder?.name}
-                  folderId={folder?.id}
-                />
-              ))}
-              {data?.map((folder) => (
-                <FolderCard
-                  key={folder?.id}
-                  name={folder?.name}
-                  folderId={folder?.id}
-                />
-              ))}
-              {data?.map((folder) => (
-                <FolderCard
-                  key={folder?.id}
-                  name={folder?.name}
-                  folderId={folder?.id}
-                />
-              ))}
-              {data?.map((folder) => (
-                <FolderCard
-                  key={folder?.id}
-                  name={folder?.name}
-                  folderId={folder?.id}
-                />
-              ))}
+      {session ? (
+        <div className="ml-4 flex w-full flex-col md:mx-4">
+          <div className="flex flex-wrap justify-center gap-5 ">
+            <div className="flex-start flex w-full flex-row justify-center">
+              {/* <UserInfo session={session} /> */}
+              <SearchBar />
             </div>
+            {data?.map((folder) => (
+              <FolderCard
+                key={folder?.id}
+                name={folder?.name}
+                folderId={folder?.id}
+              />
+            ))}
+            {data?.map((folder) => (
+              <FolderCard
+                key={folder?.id}
+                name={folder?.name}
+                folderId={folder?.id}
+              />
+            ))}
+            {data?.map((folder) => (
+              <FolderCard
+                key={folder?.id}
+                name={folder?.name}
+                folderId={folder?.id}
+              />
+            ))}
+            {data?.map((folder) => (
+              <FolderCard
+                key={folder?.id}
+                name={folder?.name}
+                folderId={folder?.id}
+              />
+            ))}
           </div>
-        ) : (
-          <>
-            Not signed in <br />
-            <button className="btn" onClick={() => signIn()}>
-              Sign in
-            </button>
-          </>
-        )}
-      </main>
+        </div>
+      ) : (
+        <>
+          Not signed in <br />
+          <button className="btn" onClick={() => signIn()}>
+            Sign in
+          </button>
+        </>
+      )}
     </>
   );
 };

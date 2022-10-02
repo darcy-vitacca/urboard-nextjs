@@ -16,7 +16,7 @@ const LinkWrapper = ({ href, children }: ILinkWrapper) => {
 type ITooltip = { toolTip: string };
 export const Tooltip: FC<ITooltip> = ({ toolTip }) => {
   return (
-    <span className="min-w-4 absolute left-full top-1/2 z-50 ml-4 -translate-y-1/2 rounded bg-gray-900 px-8 py-1.5 text-base font-medium text-white opacity-0 group-hover:opacity-100">
+    <span className="min-w-4 absolute left-full top-1/2 z-50 ml-4 -translate-y-1/2 rounded bg-gray-900 px-8 py-1.5 text-base font-medium text-white opacity-0 group-hover:opacity-100 ">
       {toolTip}
     </span>
   );
@@ -25,9 +25,12 @@ export const Tooltip: FC<ITooltip> = ({ toolTip }) => {
 export const NavIcons: FC<INavItem> = ({ toolTip, Icon, href }) => {
   return (
     <LinkWrapper href={href}>
-      <li className="group relative my-4 mx-1 flex cursor-pointer justify-center text-white">
+      <li className="group group relative my-1 flex cursor-pointer justify-center rounded-xl p-2 text-white hover:bg-white">
         {Icon && (
-          <Icon onClick={() => console.log("hit")} className="m-0 h-8 w-8 " />
+          <Icon
+            onClick={() => console.log("hit")}
+            className="m-0 h-7 w-7 group-hover:text-gray-900 "
+          />
         )}
         <Tooltip toolTip={toolTip} />
       </li>
@@ -39,7 +42,7 @@ const Sidebar = () => {
   const { data: session } = useSession();
 
   return (
-    <div className="fixed top-0 left-0 z-50 mx-2 my-3 flex  min-h-[98%] w-16 flex-col justify-between rounded-2xl border-r bg-gray-800">
+    <div className="fixed top-0 left-0 z-50 mx-2 my-3 flex  min-h-[98%] w-16 flex-col justify-between rounded-2xl border-r bg-slate-900">
       <div>
         <div className="inline-flex h-16 w-16 items-center justify-center">
           {session?.user?.image ? (
@@ -52,8 +55,8 @@ const Sidebar = () => {
             />
           ) : null}
         </div>
-        <nav className="mt-2 p-2">
-          <ul className="flex  flex-col justify-center border-t border-gray-100 pt-4">
+        <nav className="mt-2 p-1.5">
+          <ul className="flex  flex-col justify-center border-t border-gray-100 pt-4 ">
             {navItems?.map((item) => (
               <NavIcons
                 key={item?.toolTip}
