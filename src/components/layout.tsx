@@ -8,9 +8,9 @@ const Layout: FC<ILayout> = ({ children }) => {
   const router = useRouter();
 
   return (
-    <div className="flex w-full min-w-[320px] flex-row">
+    <div className="flex min-h-screen w-full min-w-[320px] flex-row bg-gray-50">
       <Sidebar />
-      <div className="mt-10 flex w-full items-start justify-center ">
+      <div className="mt-10  ml-20 flex w-full items-start justify-center">
         {children}
       </div>
     </div>

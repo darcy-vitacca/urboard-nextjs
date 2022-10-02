@@ -15,10 +15,13 @@
 [X] - Create folder schema \
 [X] - Create link schema \
 [X] - Fetch folders on home \
-[] - Add into vercel
+[X] - Add into vercel
 
 [] - Update cards/folders for home \
 [] - Reorder of folders
+[] - Add Tags to schema
+[] - Add click count to schemas
+[] - 
 
 [] - Fetch links on folders and cache
 [] - Search \
