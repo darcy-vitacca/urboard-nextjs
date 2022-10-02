@@ -1,21 +1,39 @@
-import Link from "next/link";
 import { FC } from "react";
+import { clsx } from "clsx";
+import { LinkWrapper } from "../link-wrapper/link-wrapper";
 
-type IFolderCard = { name: string; folderId: string; index: number };
-export const FolderCard: FC<IFolderCard> = ({ name, folderId }) => {
+type IFolderCard = {
+  name: string;
+  folderId: string;
+  index: number;
+  disabled: boolean;
+};
+export const FolderCard: FC<IFolderCard> = ({
+  name,
+  folderId,
+  index,
+  disabled,
+}) => {
   return (
-    <Link href={`/folder/${folderId}`}>
+    <LinkWrapper href={`/folder/${folderId}`} disabled={disabled}>
       <div
-        className="
-        group
-      card relative flex h-28 w-28 cursor-pointer items-center justify-center
-      border border-black  p-2 shadow-xl transition 
-      duration-200 ease-in-out hover:-translate-y-1 hover:scale-110 hover:border-2 hover:border-gray-900 md:h-44 md:w-44"
+        className={clsx(
+          "group card relative flex h-28 w-28 animate-edit items-center justify-center border border-black  p-2 shadow-xl  md:h-44 md:w-44",
+          {
+            ["cursor-pointer transition duration-200 ease-in-out hover:-translate-y-1 hover:scale-110 hover:border-2 hover:border-gray-900"]:
+              !disabled,
+          }
+        )}
       >
-        <h1 className="text text-center text-xs font-semibold group-hover:font-bold md:text-xl">
+        <h1
+          className={clsx(
+            "text text-center text-xs font-semibold  md:text-xl",
+            { ["group-hover:font-bold"]: !disabled }
+          )}
+        >
           {name}
         </h1>
       </div>
-    </Link>
+    </LinkWrapper>
   );
 };

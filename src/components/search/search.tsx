@@ -6,16 +6,18 @@ type SearchBarProps = {
   searchTerm: string;
   setSearchTerm: Dispatch<SetStateAction<string>>;
   filteredSearchData: Folder[] | Link[] | undefined;
+  disabled: boolean;
 };
 const SearchBar: FC<SearchBarProps> = ({
   searchTerm,
   setSearchTerm,
   filteredSearchData,
+  disabled,
 }) => {
   const { searchFocusRef } = useSearchShortcut();
 
   return (
-    <div className="w-full  max-w-[400px]">
+    <div className="w-full max-w-[400px]">
       <label htmlFor="search" className="block text-sm font-bold text-gray-700">
         Quick search
       </label>
@@ -24,6 +26,7 @@ const SearchBar: FC<SearchBarProps> = ({
           type="text"
           name="search"
           autoComplete="off"
+          disabled={disabled}
           value={searchTerm}
           id="search"
           ref={searchFocusRef}

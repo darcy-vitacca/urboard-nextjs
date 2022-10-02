@@ -2,16 +2,7 @@ import { FC } from "react";
 import Image from "next/image";
 import { useSession } from "next-auth/react";
 import { INavItem, logoutMenuItem, navItems } from "../../constants/nav";
-import Link from "next/link";
-
-type ILinkWrapper = {
-  href?: string;
-  children: JSX.Element | JSX.Element[];
-};
-
-const LinkWrapper = ({ href, children }: ILinkWrapper) => {
-  return href ? <Link href={href}>{children}</Link> : <>{children}</>;
-};
+import { LinkWrapper } from "../link-wrapper/link-wrapper";
 
 type ITooltip = { toolTip: string };
 export const Tooltip: FC<ITooltip> = ({ toolTip }) => {
