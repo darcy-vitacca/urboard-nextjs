@@ -1,4 +1,4 @@
-import { Dispatch, FC, SetStateAction } from "react";
+import { Dispatch, FC, SetStateAction, useState } from "react";
 import { clsx } from "clsx";
 import { ArrowPathRoundedSquareIcon } from "@heroicons/react/24/outline";
 import SearchBar from "../search/search";
@@ -46,7 +46,10 @@ const FolderSection: FC = () => {
     filteredSearchData,
     setReorder,
     submitReorder,
+    reorderItems,
+    setReorderItems,
   } = useFolder();
+
   return (
     <div className="mx-3 flex w-full flex-col md:mx-4">
       <div className="flex flex-wrap justify-center gap-5 ">
@@ -67,7 +70,11 @@ const FolderSection: FC = () => {
         <div className="flex-start flex w-full flex-row justify-center"></div>
         {filteredSearchData?.length ? (
           reorder ? (
-            <SortableContainer filteredSearchData={filteredSearchData} />
+            <SortableContainer
+              filteredSearchData={filteredSearchData}
+              reorderItems={reorderItems}
+              setReorderItems={setReorderItems}
+            />
           ) : (
             filteredSearchData?.map((folder, index) => (
               <FolderCard
