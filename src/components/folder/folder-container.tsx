@@ -31,6 +31,8 @@ type SortableItem = {
 };
 const SortableItem: FC<SortableItem> = ({ data }) => {
   const { attributes, listeners, setNodeRef, transform, transition } =
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    //@ts-ignore
     useSortable({ id: data?.id });
 
   return (
@@ -46,7 +48,9 @@ const SortableItem: FC<SortableItem> = ({ data }) => {
 };
 
 const SortableContainer: FC<SortableProps> = ({ filteredData }) => {
-  const [items, setItems] = useState<Folder[] | Link[]>(filteredData);
+  const [items, setItems] = useState<Folder[] | Link[] | undefined>(
+    filteredData
+  );
   const [activeId, setActiveId] = useState<string | null | UniqueIdentifier>(
     null
   );
@@ -95,6 +99,8 @@ const SortableContainer: FC<SortableProps> = ({ filteredData }) => {
       setItems((items) => {
         const oldIndex = items?.findIndex((item) => item?.id === active?.id);
         const newIndex = items?.findIndex((item) => item?.id === over?.id);
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        //@ts-ignore
         return arrayMove(items, oldIndex, newIndex);
       });
     }
