@@ -18,14 +18,17 @@
 [X] - Add into vercel
 
 [X] - Add Search bar UI
-[] - Update cards/folders for home \
+[] - Make search filter func decoupled
+[] - Update cards/folders for home
 [] - Reorder of folders
 [] - Add Tags to schema
 [] - Add click count to schemas
 [] - Option to add description
+[] - fix unauth calls on home page
 
 [] - Fetch links on folders and cache
 [] - Search \
 [] - Edit folders and links \
 [] - Delete links and folders
-[] -
+[]
+[] - Command number short cut to folders.

@@ -1,4 +1,5 @@
 import { FC } from "react";
+import { EllipsisVerticalIcon } from "@heroicons/react/24/outline";
 import { Session } from "next-auth";
 import Image from "next/image";
 import { signOut } from "next-auth/react";
