@@ -5,15 +5,17 @@ import SearchBar from "../search/search";
 import { FolderCard } from "./folder";
 import SortableContainer from "./folder-container";
 import { Folder, Link } from "@prisma/client";
+import { useFolder } from "../../utils/hooks/useFolder";
 
 export const ReorderBtn: FC<{
   reorder: boolean;
   setReorder: Dispatch<SetStateAction<boolean>>;
-}> = ({ reorder, setReorder }) => {
+  submitReorder: () => void;
+}> = ({ reorder, setReorder, submitReorder }) => {
   return (
     <button
       className="mt-3 flex w-12 flex-col justify-center text-center"
-      onClick={() => setReorder(!reorder)}
+      onClick={() => (!reorder ? setReorder(true) : submitReorder())}
     >
       <div
         className={clsx("flex flex-col justify-center text-center", {
@@ -36,24 +38,15 @@ export const ReorderBtn: FC<{
   );
 };
 
-type FolderSectionProps = {
-  searchTerm: string;
-  setSearchTerm: Dispatch<SetStateAction<string>>;
-  filteredSearchData: Folder[] | undefined;
-  reorder: boolean;
-  setReorder: Dispatch<SetStateAction<boolean>>;
-  reorderItems: Folder[] | Link[] | undefined;
-  setReorderItems: Dispatch<SetStateAction<Folder[] | Link[] | undefined>>;
-};
-const FolderSection: FC<FolderSectionProps> = ({
-  reorder,
-  searchTerm,
-  setSearchTerm,
-  filteredSearchData,
-  setReorder,
-  setReorderItems,
-  reorderItems,
-}) => {
+const FolderSection: FC = () => {
+  const {
+    reorder,
+    searchTerm,
+    setSearchTerm,
+    filteredSearchData,
+    setReorder,
+    submitReorder,
+  } = useFolder();
   return (
     <div className="mx-3 flex w-full flex-col md:mx-4">
       <div className="flex flex-wrap justify-center gap-5 ">
@@ -65,15 +58,16 @@ const FolderSection: FC<FolderSectionProps> = ({
             setSearchTerm={setSearchTerm}
             filteredSearchData={filteredSearchData}
           />
-          <ReorderBtn setReorder={setReorder} reorder={reorder} />
+          <ReorderBtn
+            setReorder={setReorder}
+            reorder={reorder}
+            submitReorder={submitReorder}
+          />
         </div>
         <div className="flex-start flex w-full flex-row justify-center"></div>
         {filteredSearchData?.length ? (
           reorder ? (
-            <SortableContainer
-              setReorderItems={setReorderItems}
-              reorderItems={reorderItems}
-            />
+            <SortableContainer filteredSearchData={filteredSearchData} />
           ) : (
             filteredSearchData?.map((folder, index) => (
               <FolderCard

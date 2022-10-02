@@ -19,6 +19,14 @@ export const protectedRouter = createProtectedRouter()
       });
     },
   })
+  .mutation("update-folder-order", {
+    // input: createFolderValidator,
+    async resolve({ input, ctx }) {
+
+      if (!ctx?.session) throw new Error("Unauthorized");
+      return "hit";
+    },
+  })
   .query("get-my-folders", {
     async resolve({ ctx }) {
       if (!ctx?.session) throw new Error("Unauthorized");

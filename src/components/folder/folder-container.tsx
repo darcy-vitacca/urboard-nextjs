@@ -1,4 +1,4 @@
-import React, { Dispatch, FC, SetStateAction, useState } from "react";
+import React, { FC, useState } from "react";
 import { Folder, Link } from "@prisma/client";
 import {
   DndContext,
@@ -23,8 +23,7 @@ import {
 import { FolderCard } from "./folder";
 
 type SortableProps = {
-  reorderItems: Folder[] | Link[] | undefined;
-  setReorderItems: Dispatch<SetStateAction<Folder[] | Link[] | undefined>>;
+  filteredSearchData: Folder[] | undefined;
 };
 
 type SortableItem = {
@@ -48,10 +47,11 @@ const SortableItem: FC<SortableItem> = ({ data }) => {
   );
 };
 
-const SortableContainer: FC<SortableProps> = ({
-  reorderItems,
-  setReorderItems,
-}) => {
+const SortableContainer: FC<SortableProps> = ({ filteredSearchData }) => {
+  const [reorderItems, setReorderItems] = useState<
+    Folder[] | Link[] | undefined
+  >(filteredSearchData);
+
   const [activeId, setActiveId] = useState<string | null | UniqueIdentifier>(
     null
   );
@@ -105,7 +105,8 @@ const SortableContainer: FC<SortableProps> = ({
         const newIndex = items?.findIndex((item) => item?.id === over?.id);
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         //@ts-ignore
-        return arrayMove(items, oldIndex, newIndex);
+        const updatedArray = arrayMove(items, oldIndex, newIndex);
+        return updatedArray;
       });
     }
   }
