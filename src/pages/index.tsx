@@ -1,58 +1,15 @@
 import type { NextPage } from "next";
 import Head from "next/head";
-import Image from "next/image";
 import { useSession, signIn, signOut } from "next-auth/react";
 import { AuthStatus } from "../types/custom-next-auth";
 import { Spinner } from "../components/spinner/spinner";
 import { trpc } from "../utils/trpc";
-import { FC } from "react";
-import { Session } from "next-auth";
+
 import Link from "next/link";
 import SearchBar from "../components/search/search";
+import { FolderCard } from "../components/folder/folder";
 
-export const UserInfo: FC<{ session: Session | null }> = ({ session }) => {
-  return (
-    <div className="flex w-full">
-      <div className="w-48">
-        <div className="flex flex-row justify-between">
-          <div className="flex flex-col">
-            <h1 className="prose-xl">{session?.user?.name}</h1>
-            <p className="prose-md">{session?.user?.email}</p>
-          </div>
-        </div>
-        <div className="flex justify-between">
-          <button className="btn" onClick={() => signOut()}>
-            Sign out
-          </button>
-          {session?.user?.image ? (
-            <Image
-              className="rounded-full"
-              src={session?.user?.image}
-              width={50}
-              height={50}
-              alt="User image"
-            />
-          ) : null}
-        </div>
-      </div>
-    </div>
-  );
-};
 
-export const FolderCard: FC<{ name: string; folderId: string }> = ({
-  name,
-  folderId,
-}) => {
-  return (
-    <Link href={`/folder/${folderId}`}>
-      <div className="card flex h-28 w-28 cursor-pointer items-center justify-center border bg-base-100 p-2 shadow-xl hover:border-2 hover:border-gray-900 md:h-48 md:w-48">
-        <h1 className="text text-center text-xs font-bold md:text-xl">
-          {name}
-        </h1>
-      </div>
-    </Link>
-  );
-};
 
 const Home: NextPage = () => {
   const { data: session, status } = useSession();
@@ -79,27 +36,6 @@ const Home: NextPage = () => {
               {/* <UserInfo session={session} /> */}
               <SearchBar />
             </div>
-            {data?.map((folder) => (
-              <FolderCard
-                key={folder?.id}
-                name={folder?.name}
-                folderId={folder?.id}
-              />
-            ))}
-            {data?.map((folder) => (
-              <FolderCard
-                key={folder?.id}
-                name={folder?.name}
-                folderId={folder?.id}
-              />
-            ))}
-            {data?.map((folder) => (
-              <FolderCard
-                key={folder?.id}
-                name={folder?.name}
-                folderId={folder?.id}
-              />
-            ))}
             {data?.map((folder) => (
               <FolderCard
                 key={folder?.id}
