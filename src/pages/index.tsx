@@ -17,6 +17,7 @@ const Home: NextPage = () => {
     "protected.get-my-folders",
   ]);
   const [searchTerm, setSearchTerm] = useState("");
+  const [reorder, setReorder] = useState(false);
 
   if (status === AuthStatus.LOADING || isLoading) {
     return <Spinner />;
@@ -24,7 +25,6 @@ const Home: NextPage = () => {
 
   const filteredFolders =
     searchTerm !== "" ? filterSearch({ data, searchTerm }) : data;
-  console.log("filterFedolders", filteredFolders);
 
   return (
     <>
@@ -37,14 +37,19 @@ const Home: NextPage = () => {
         <div className="mx-3 flex w-full flex-col md:mx-4">
           <div className="flex flex-wrap justify-center gap-5 ">
             {/* <UserInfo session={session} /> */}
-            <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
+            <SearchBar
+              searchTerm={searchTerm}
+              setSearchTerm={setSearchTerm}
+              filteredSearchData={filteredFolders}
+            />
             <div className="flex-start flex w-full flex-row justify-center"></div>
             {filteredFolders?.length ? (
-              filteredFolders.map((folder) => (
+              filteredFolders.map((folder, index) => (
                 <FolderCard
                   key={folder?.id}
                   name={folder?.name}
                   folderId={folder?.id}
+                  index={index}
                 />
               ))
             ) : (

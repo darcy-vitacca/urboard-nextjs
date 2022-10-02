@@ -13,7 +13,7 @@ const FolderContent: FC<{ id: string }> = ({ id }) => {
   console.log("data", data);
 
   if (isLoading || !data) {
-    return <Spinner />;
+  return <Spinner />;
   }
 
   return (

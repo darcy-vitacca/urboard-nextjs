@@ -18,7 +18,7 @@
 [X] - Add into vercel
 
 [X] - Add Search bar UI
-[] - Make search filter func decoupled
+[X] - Make search filter func decoupled
 [] - Update cards/folders for home
 [] - Reorder of folders
 [] - Add Tags to schema

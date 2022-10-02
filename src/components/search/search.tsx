@@ -1,11 +1,17 @@
+import { Folder, Link } from "@prisma/client";
 import { ChangeEvent, Dispatch, FC, SetStateAction } from "react";
 import { useSearchShortcut } from "../../utils/hooks/useSearchShortcut";
 
 type SearchBarProps = {
   searchTerm: string;
   setSearchTerm: Dispatch<SetStateAction<string>>;
+  filteredSearchData: Folder[] | Link[] | undefined;
 };
-const SearchBar: FC<SearchBarProps> = ({ searchTerm, setSearchTerm }) => {
+const SearchBar: FC<SearchBarProps> = ({
+  searchTerm,
+  setSearchTerm,
+  filteredSearchData,
+}) => {
   const { searchFocusRef } = useSearchShortcut();
 
   return (
@@ -17,6 +23,7 @@ const SearchBar: FC<SearchBarProps> = ({ searchTerm, setSearchTerm }) => {
         <input
           type="text"
           name="search"
+          autoComplete="off"
           value={searchTerm}
           id="search"
           ref={searchFocusRef}

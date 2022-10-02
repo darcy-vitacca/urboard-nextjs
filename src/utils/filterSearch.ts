@@ -1,9 +1,8 @@
+import { Folder, Link } from "@prisma/client";
 
 
-export const filterSearch = ({ data, searchTerm }: {
-    data:
-    // should be folder or link
-    any, searchTerm: string | null
-}): any[] => data?.filter((folder) => {
-    return folder.name.toLowerCase().includes(searchTerm?.toLowerCase());
+export const filterSearch = ({ data, searchTerm = "" }: {
+    data: Folder[] | Link[] | undefined, searchTerm: string
+}): Folder[] | Link[] | undefined => data?.filter((searchItem) => {
+    return searchItem.name.toLowerCase().includes(searchTerm.toLowerCase());
 });
