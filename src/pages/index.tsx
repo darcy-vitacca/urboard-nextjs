@@ -45,8 +45,10 @@ export const FolderCard: FC<{ name: string; folderId: string }> = ({
 }) => {
   return (
     <Link href={`/folder/${folderId}`}>
-      <div className=" card flex  h-52 w-52 cursor-pointer items-center justify-center border bg-base-100 p-2 shadow-xl hover:border-gray-900">
-        <h1 className="r card-title">{name}</h1>
+      <div className="card flex h-28 w-28 cursor-pointer items-center justify-center border bg-base-100 p-2 shadow-xl hover:border-2 hover:border-gray-900 md:h-48 md:w-48">
+        <h1 className="text text-center text-xs font-bold md:text-xl">
+          {name}
+        </h1>
       </div>
     </Link>
   );
