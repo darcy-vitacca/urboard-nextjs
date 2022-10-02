@@ -20,6 +20,7 @@
 [X] - Add Search bar UI \
 [X] - Make search filter func decoupled \
 [] - Reorder of folders \
+[] - Abstract a folder reducer \
 [] - Update cards/folders for home \
 [] - Add Tags to schema \
 [] - Add click count to schemas \

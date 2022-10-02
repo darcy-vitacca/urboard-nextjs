@@ -1,4 +1,4 @@
-import React, { FC, useState } from "react";
+import React, { Dispatch, FC, SetStateAction, useState } from "react";
 import { Folder, Link } from "@prisma/client";
 import {
   DndContext,
@@ -23,7 +23,8 @@ import {
 import { FolderCard } from "./folder";
 
 type SortableProps = {
-  filteredData: Folder[] | Link[] | undefined;
+  reorderItems: Folder[] | Link[] | undefined;
+  setReorderItems: Dispatch<SetStateAction<Folder[] | Link[] | undefined>>;
 };
 
 type SortableItem = {
@@ -47,10 +48,10 @@ const SortableItem: FC<SortableItem> = ({ data }) => {
   );
 };
 
-const SortableContainer: FC<SortableProps> = ({ filteredData }) => {
-  const [items, setItems] = useState<Folder[] | Link[] | undefined>(
-    filteredData
-  );
+const SortableContainer: FC<SortableProps> = ({
+  reorderItems,
+  setReorderItems,
+}) => {
   const [activeId, setActiveId] = useState<string | null | UniqueIdentifier>(
     null
   );
@@ -61,23 +62,26 @@ const SortableContainer: FC<SortableProps> = ({ filteredData }) => {
     })
   );
 
-  return items ? (
+  return reorderItems ? (
     <DndContext
       onDragStart={handleDragStart}
       onDragEnd={handleDragEnd}
       sensors={sensors}
       collisionDetection={closestCenter}
     >
-      <SortableContext items={items} strategy={verticalListSortingStrategy}>
-        {items?.map((item) => (
+      <SortableContext
+        items={reorderItems}
+        strategy={verticalListSortingStrategy}
+      >
+        {reorderItems?.map((item) => (
           <SortableItem key={item?.id} data={item} />
         ))}
       </SortableContext>
-      <DragOverlay>
+      <DragOverlay className="opacity-100">
         {activeId ? (
           <SortableItem
             key={activeId}
-            data={items?.find((item) => item?.id === activeId)}
+            data={reorderItems?.find((item) => item?.id === activeId)}
           />
         ) : null}
       </DragOverlay>
@@ -96,7 +100,7 @@ const SortableContainer: FC<SortableProps> = ({ filteredData }) => {
 
     if (active.id !== over?.id) {
       setActiveId(null);
-      setItems((items) => {
+      setReorderItems((items) => {
         const oldIndex = items?.findIndex((item) => item?.id === active?.id);
         const newIndex = items?.findIndex((item) => item?.id === over?.id);
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
