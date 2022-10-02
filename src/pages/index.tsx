@@ -1,16 +1,17 @@
-import { clsx } from "clsx";
 import { Dispatch, FC, SetStateAction, useState } from "react";
-import { ArrowPathRoundedSquareIcon } from "@heroicons/react/24/outline";
 import type { NextPage } from "next";
-import Head from "next/head";
 import { useSession, signIn } from "next-auth/react";
+import Head from "next/head";
+import { clsx } from "clsx";
+
+import { trpc } from "../utils/trpc";
+import { ArrowPathRoundedSquareIcon } from "@heroicons/react/24/outline";
 import { AuthStatus } from "../types/custom-next-auth";
 import { Spinner } from "../components/spinner/spinner";
-import { trpc } from "../utils/trpc";
-
 import SearchBar from "../components/search/search";
-import { FolderCard } from "../components/folder/folder";
 import { filterSearch } from "../utils/filterSearch";
+import SortableContainer from "../components/folder/folder-container";
+import { FolderCard } from "../components/folder/folder";
 
 export const ReorderBtn: FC<{
   reorder: boolean;
@@ -28,7 +29,7 @@ export const ReorderBtn: FC<{
       >
         <ArrowPathRoundedSquareIcon
           className={clsx("m-auto block h-6 w-6 ", {
-            ["animate-spin text-teal-500"]: reorder,
+            ["animate-spin text-teal-400"]: reorder,
           })}
         />
         <label
@@ -69,6 +70,9 @@ const Home: NextPage = (props) => {
       {session ? (
         <div className="mx-3 flex w-full flex-col md:mx-4">
           <div className="flex flex-wrap justify-center gap-5 ">
+            {filteredFolders ? (
+              <SortableContainer filteredData={filteredFolders} />
+            ) : null}
             <div className="mx-auto flex w-full flex-col items-center">
               {/* <UserInfo session={session} /> */}
               <SearchBar
@@ -80,8 +84,8 @@ const Home: NextPage = (props) => {
               <ReorderBtn setReorder={setReorder} reorder={reorder} />
             </div>
             <div className="flex-start flex w-full flex-row justify-center"></div>
-            {filteredFolders?.length ? (
-              filteredFolders.map((folder, index) => (
+            {/* {filteredFolders?.length ? (
+              filteredFolders?.map((folder, index) => (
                 <FolderCard
                   key={folder?.id}
                   name={folder?.name}
@@ -92,7 +96,7 @@ const Home: NextPage = (props) => {
               ))
             ) : (
               <p>No folders found</p>
-            )}
+            )} */}
           </div>
         </div>
       ) : (

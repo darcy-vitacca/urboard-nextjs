@@ -17,18 +17,18 @@
 [X] - Fetch folders on home \
 [X] - Add into vercel
 
-[X] - Add Search bar UI
-[X] - Make search filter func decoupled
-[] - Update cards/folders for home
-[] - Reorder of folders
-[] - Add Tags to schema
-[] - Add click count to schemas
-[] - Option to add description
-[] - fix unauth calls on home page
+[X] - Add Search bar UI \
+[X] - Make search filter func decoupled \
+[] - Reorder of folders \
+[] - Update cards/folders for home \
+[] - Add Tags to schema \
+[] - Add click count to schemas \
+[] - Option to add description \
+[] - fix unauth calls on home page \
+[] - Breadcrumbs down the bottom in page
 
-[] - Fetch links on folders and cache
+[] - Fetch links on folders and cache \
 [] - Search \
 [] - Edit folders and links \
-[] - Delete links and folders
-[]
+[] - Delete links and folders \
 [] - Command number short cut to folders.
