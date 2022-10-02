@@ -50,14 +50,9 @@ const SortableItem: FC<SortableItem> = ({ data }) => {
 };
 
 const SortableContainer: FC<SortableProps> = ({
-  // filteredSearchData,
   reorderItems,
   setReorderItems,
 }) => {
-  // const [reorderItems, setReorderItems] = useState<
-  //   Folder[] | Link[] | undefined
-  // >(filteredSearchData);
-
   const [activeId, setActiveId] = useState<string | null | UniqueIdentifier>(
     null
   );

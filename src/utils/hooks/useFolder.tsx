@@ -49,10 +49,9 @@ export const useFolder = (): UseFolder => {
     //TODO check if any updates between data then mutate else don't
     console.log("data", data);
     console.log("reorderItems", reorderItems);
-
     console.log("submited");
     setReorder(false);
-    // mutate(reorderItems);
+    if (reorderItems) mutate(reorderItems);
   };
 
   return {
