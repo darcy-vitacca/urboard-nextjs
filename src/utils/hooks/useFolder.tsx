@@ -51,6 +51,7 @@ export const useFolder = (): UseFolder => {
     console.log("reorderItems", reorderItems);
     console.log("submited");
     setReorder(false);
+    //look at old items, then check which need to be updated and only mutate those
     if (reorderItems) mutate(reorderItems);
   };
 
