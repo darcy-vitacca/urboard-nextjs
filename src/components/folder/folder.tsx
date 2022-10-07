@@ -5,15 +5,9 @@ import { LinkWrapper } from "../link-wrapper/link-wrapper";
 type IFolderCard = {
   name: string;
   folderId: string;
-  index?: number;
   disabled: boolean;
 };
-export const FolderCard: FC<IFolderCard> = ({
-  name,
-  folderId,
-  index,
-  disabled,
-}) => {
+export const FolderCard: FC<IFolderCard> = ({ name, folderId, disabled }) => {
   return (
     <LinkWrapper href={`/folder/${folderId}`} disabled={disabled}>
       <div

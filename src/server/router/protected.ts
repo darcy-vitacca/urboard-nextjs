@@ -2,7 +2,17 @@ import { createFolderValidator } from '../../validators/create-folder-validator'
 import { createProtectedRouter } from "./context";
 import { prisma } from "../db/client";
 import { z } from 'zod';
+import { Folder, Prisma } from '@prisma/client';
 
+
+export const handleOrder = ({ foldersData, order }: {
+  foldersData: Folder[], order: string[] | undefined
+}): Folder[] | undefined => {
+  if (order) {
+    foldersData.sort((a, b) => order?.indexOf(a.id) - order?.indexOf(b.id));
+  }
+  return foldersData
+}
 
 export const protectedRouter = createProtectedRouter()
   .mutation("create-folder", {
@@ -10,6 +20,7 @@ export const protectedRouter = createProtectedRouter()
     async resolve({ input, ctx }) {
 
       if (!ctx?.session) throw new Error("Unauthorized");
+
       return await prisma.folder.create({
         data: {
           name: input.name,
@@ -20,7 +31,6 @@ export const protectedRouter = createProtectedRouter()
     },
   })
   .mutation("update-folder-order", {
-    //TODO add validator extract to one place
     input: z.array(z.object({
       id: z.string(),
       createdAt: z.date(),
@@ -28,38 +38,63 @@ export const protectedRouter = createProtectedRouter()
       userId: z.string(),
       name: z.string(),
       imageUrl: z.string().nullable(),
-      index: z.number(),
-      links: z.array(z.object({
-        //TODO extract validator to once place
-      }))
     })),
     async resolve({ input, ctx }) {
-      console.log('input', input);
-
-
       if (!ctx?.session) throw new Error("Unauthorized");
 
-      return prisma.$transaction(
-        input.map((cur, idx) =>
-          prisma.folder.upsert({
-            where: { id: cur.id },
-            update: { ...cur, index: idx },
-            create: {}
-          })
-        )
-      );
+      const foldersOrder = input?.map((folder) => {
+        return folder?.id
+      })
+
+      const data = await prisma.foldersOrder.update({
+        where: {
+          userId: ctx?.session?.user?.id
+        },
+        data: {
+          order: foldersOrder,
+        },
+      })
+
+      console.log('data', data);
+
+      const folders = handleOrder({ foldersData: input, order: foldersOrder })
+      return folders
     },
   })
   .query("get-my-folders", {
     async resolve({ ctx }) {
       if (!ctx?.session) throw new Error("Unauthorized");
-      return await prisma.folder.findMany({
+      const foldersOrder = await prisma.foldersOrder.findFirst({
+        where: {
+          userId: {
+            equals: ctx?.session?.user?.id,
+          }
+        },
+        select: {
+          order: true,
+        },
+      })
+
+      console.log('foldersOrder', foldersOrder);
+
+
+      const foldersData = await prisma.folder.findMany({
         where: {
           userId: {
             equals: ctx?.session?.user?.id,
           },
         },
       });
+
+
+
+      const order = foldersOrder?.order as Prisma.JsonArray ?? undefined;
+
+      const folders = handleOrder({ foldersData, order })
+
+      console.log('folders', folders);
+
+      return folders;
     },
   })
   .query("get-folder-by-id", {
@@ -68,8 +103,6 @@ export const protectedRouter = createProtectedRouter()
     }),
     async resolve({ input, ctx }) {
       if (!ctx?.session) throw new Error("Unauthorized");
-
-      console.log('ctx.session', ctx.session);
 
       return await prisma.folder.findFirst({
         where: {

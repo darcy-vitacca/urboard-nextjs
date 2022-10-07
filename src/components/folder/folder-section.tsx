@@ -76,12 +76,11 @@ const FolderSection: FC = () => {
               setReorderItems={setReorderItems}
             />
           ) : (
-            filteredSearchData?.map((folder, index) => (
+            filteredSearchData?.map((folder) => (
               <FolderCard
                 key={folder?.id}
                 name={folder?.name}
                 folderId={folder?.id}
-                index={index}
                 disabled={reorder}
               />
             ))

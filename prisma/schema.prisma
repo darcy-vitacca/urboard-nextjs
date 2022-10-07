@@ -45,6 +45,8 @@ model User {
     sessions      Session[]
     folders       Folder[]
     links       Link[]
+    foldersOrder      FoldersOrder? 
+   
 }
 
 model VerificationToken {
@@ -59,14 +61,13 @@ model Folder {
     id        String   @id @default(cuid())
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
-
     user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
     userId    String
     links     Link[]
-
     name      String
     imageUrl  String?
-    index    Int @default(0)
+    linkOrders      LinkOrder[]
+
 }
 
 model Link {
@@ -77,9 +78,26 @@ model Link {
     folderId  String
     user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
     userId    String
-
     name      String
     imageUrl  String?
     url       String
-    index    Int  @default(0)
+
+}
+
+model FoldersOrder {
+    id        String   @id @default(cuid())
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+    user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+    userId    String @unique
+    order    Json 
+}
+
+model LinkOrder {
+    id        String   @id @default(cuid())
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+    folder    Folder   @relation(fields: [folderId], references: [id], onDelete: Cascade)
+    folderId  String
+    order    Json  
 }

@@ -10,6 +10,8 @@ import { useFolder } from "../utils/hooks/useFolder";
 const Home: NextPage = (props) => {
   const { data: session, status } = useSession();
 
+  console.log("session", session);
+
   const { isLoading } = useFolder();
 
   if (status === AuthStatus.LOADING || isLoading) {
