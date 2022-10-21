@@ -21,6 +21,8 @@ export const useFolder = (): UseFolder => {
   const [searchTerm, setSearchTerm] = useState("");
   const [reorderItems, setReorderItems] = useState<Folder[] | undefined>();
 
+  console.log("reorderItems", reorderItems);
+
   const { mutate, isLoading: isUpdateFoldersLoading } = trpc.useMutation(
     "protected.update-folder-order",
     {
@@ -34,12 +36,16 @@ export const useFolder = (): UseFolder => {
   const { data, isLoading: isFoldersLoading } = trpc.useQuery(
     ["protected.get-my-folders"],
     {
+      refetchOnReconnect: false,
+      refetchOnMount: false,
+      refetchOnWindowFocus: false,
       enabled: !reorder || !isUpdateFoldersLoading,
       onSuccess(data) {
         setReorderItems(data);
       },
     }
   );
+  // console.log("reorderItems", reorderItems);
 
   const isLoading = isFoldersLoading || isUpdateFoldersLoading;
 
@@ -50,7 +56,9 @@ export const useFolder = (): UseFolder => {
     //TODO check if any updates between data then mutate else don't
     console.log("data", data);
     //look at old items, then check which need to be updated and only mutate those
-    if (reorderItems) mutate(reorderItems);
+    if (reorderItems) {
+      // mutate(reorderItems);
+    }
   };
 
   console.log("data", data);

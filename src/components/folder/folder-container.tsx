@@ -53,6 +53,10 @@ const SortableContainer: FC<SortableProps> = ({
   reorderItems,
   setReorderItems,
 }) => {
+  console.log({
+    reorderItems,
+    setReorderItems,
+  });
   const [activeId, setActiveId] = useState<string | null | UniqueIdentifier>(
     null
   );

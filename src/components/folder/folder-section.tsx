@@ -50,6 +50,8 @@ const FolderSection: FC = () => {
     setReorderItems,
   } = useFolder();
 
+  console.log("reorderItems", reorderItems);
+
   return (
     <div className="mx-3 flex w-full flex-col md:mx-4">
       <div className="flex flex-wrap justify-center gap-5 ">
