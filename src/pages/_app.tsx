@@ -1,4 +1,3 @@
-import { createContext } from "react";
 // src/pages/_app.tsx
 import { httpBatchLink } from "@trpc/client/links/httpBatchLink";
 import { loggerLink } from "@trpc/client/links/loggerLink";
@@ -12,20 +11,15 @@ import "../styles/globals.css";
 
 import Layout from "../components/layout";
 
-
-
 const MyApp: AppType<{ session: Session | null }> = ({
   Component,
   pageProps: { session, ...pageProps },
 }) => {
- 
   return (
     <SessionProvider session={session}>
-      <FolderContext.Provider value={{ folders: undefined }}>
-        <Layout>
-          <Component {...pageProps} />
-        </Layout>
-      </FolderContext.Provider>
+      <Layout>
+        <Component {...pageProps} />
+      </Layout>
     </SessionProvider>
   );
 };
@@ -38,12 +32,7 @@ const getBaseUrl = () => {
 
 export default withTRPC<AppRouter>({
   config({ ctx }) {
-    /**
-     * If you want to use SSR, you need to use the server's full URL
-     * @link https://trpc.io/docs/ssr
-     */
     const url = `${getBaseUrl()}/api/trpc`;
-
     return {
       links: [
         loggerLink({
@@ -55,27 +44,8 @@ export default withTRPC<AppRouter>({
       ],
       url,
       transformer: superjson,
-      /**
-       * @link https://react-query.tanstack.com/reference/QueryClient
-       */
-      // queryClientConfig: { defaultOptions: { queries: { staleTime: 60 } } },
-
-      // To use SSR properly you need to forward the client's headers to the server
-      // headers: () => {
-      //   if (ctx?.req) {
-      //     const headers = ctx?.req?.headers;
-      //     delete headers?.connection;
-      //     return {
-      //       ...headers,
-      //       "x-ssr": "1",
-      //     };
-      //   }
-      //   return {};
-      // }
     };
   },
-  /**
-   * @link https://trpc.io/docs/ssr
-   */
+
   ssr: false,
 })(MyApp);
