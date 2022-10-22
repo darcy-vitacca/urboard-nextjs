@@ -1,6 +1,7 @@
-import { Folder, Link } from "@prisma/client";
 import { ChangeEvent, Dispatch, FC, SetStateAction } from "react";
+import { Folder } from "../../utils/hooks/useFolder";
 import { useSearchShortcut } from "../../utils/hooks/useSearchShortcut";
+import { Link } from "../folder/folder-container";
 
 type SearchBarProps = {
   searchTerm: string;

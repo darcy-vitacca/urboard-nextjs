@@ -1,8 +1,16 @@
-import React from "react";
+import clsx from "clsx";
+import { FC } from "react";
 
-export const Spinner = () => {
+interface ISpinnerProps {
+  absolute?: boolean;
+}
+export const Spinner: FC<ISpinnerProps> = ({ absolute }) => {
   return (
-    <div className="absolute left-1/2 top-1/2">
+    <div
+      className={clsx("", {
+        ["absolute left-1/2 top-1/2"]: absolute,
+      })}
+    >
       <svg
         className="-ml-1 mr-3 h-7 w-7 animate-spin text-black"
         xmlns="http://www.w3.org/2000/svg"

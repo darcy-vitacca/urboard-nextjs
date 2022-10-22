@@ -1,5 +1,4 @@
 import React, { Dispatch, FC, SetStateAction, useState } from "react";
-import { Folder, Link } from "@prisma/client";
 import {
   DndContext,
   closestCenter,
@@ -21,6 +20,18 @@ import {
 } from "@dnd-kit/sortable";
 
 import { FolderCard } from "./folder";
+import { Folder } from "../../utils/hooks/useFolder";
+
+export type Link = {
+  id: string;
+  createdAt: Date;
+  updatedAt: Date;
+  folderId: string;
+  userId: string;
+  name: string;
+  imageUrl: string | null;
+  url: string;
+};
 
 type SortableProps = {
   filteredSearchData: Folder[] | undefined;
@@ -32,7 +43,7 @@ type SortableItem = {
   data: Folder | Link | undefined;
 };
 const SortableItem: FC<SortableItem> = ({ data }) => {
-  const { attributes, listeners, setNodeRef, transform, transition } =
+  const { attributes, listeners, setNodeRef } =
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     //@ts-ignore
     useSortable({ id: data?.id });
@@ -53,10 +64,6 @@ const SortableContainer: FC<SortableProps> = ({
   reorderItems,
   setReorderItems,
 }) => {
-  console.log({
-    reorderItems,
-    setReorderItems,
-  });
   const [activeId, setActiveId] = useState<string | null | UniqueIdentifier>(
     null
   );

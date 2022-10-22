@@ -1,4 +1,6 @@
-import { Folder, Link } from "@prisma/client";
+import { Link } from "../components/folder/folder-container";
+import { Folder } from "./hooks/useFolder";
+
 
 
 export const filterSearch = ({ data, searchTerm = "" }: {

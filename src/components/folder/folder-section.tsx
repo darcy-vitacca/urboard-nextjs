@@ -1,20 +1,26 @@
-import { Dispatch, FC, SetStateAction, useState } from "react";
+import { Dispatch, FC, SetStateAction } from "react";
 import { clsx } from "clsx";
 import { ArrowPathRoundedSquareIcon } from "@heroicons/react/24/outline";
 import SearchBar from "../search/search";
 import { FolderCard } from "./folder";
 import SortableContainer from "./folder-container";
-import { Folder, Link } from "@prisma/client";
 import { useFolder } from "../../utils/hooks/useFolder";
+import { Spinner } from "../spinner/spinner";
 
 export const ReorderBtn: FC<{
   reorder: boolean;
   setReorder: Dispatch<SetStateAction<boolean>>;
   submitReorder: () => void;
-}> = ({ reorder, setReorder, submitReorder }) => {
+  disabled: boolean;
+  isUpdating: boolean;
+}> = ({ reorder, setReorder, submitReorder, isUpdating, disabled }) => {
+  console.log("isUpdating", isUpdating);
+  console.log("disabled", disabled);
+
   return (
     <button
       className="mt-3 flex w-12 flex-col justify-center text-center"
+      disabled={disabled}
       onClick={() => (!reorder ? setReorder(true) : submitReorder())}
     >
       <div
@@ -24,14 +30,14 @@ export const ReorderBtn: FC<{
       >
         <ArrowPathRoundedSquareIcon
           className={clsx("m-auto block h-6 w-6 ", {
-            ["animate-spin text-teal-400"]: reorder,
+            ["animate-spin text-teal-400"]: reorder || isUpdating,
           })}
         />
         <label
           htmlFor="search"
           className=" block min-w-[50px] text-xs font-bold text-gray-700"
         >
-          {reorder ? "Save" : "Reorder"}
+          {isUpdating ? "Saving" : reorder ? "Save" : "Reorder"}
         </label>
       </div>
     </button>
@@ -48,9 +54,13 @@ const FolderSection: FC = () => {
     submitReorder,
     reorderItems,
     setReorderItems,
+    isFoldersLoading,
+    isUpdateFoldersLoading,
   } = useFolder();
 
-  console.log("reorderItems", reorderItems);
+  if (isFoldersLoading) {
+    return <Spinner absolute />;
+  }
 
   return (
     <div className="mx-3 flex w-full flex-col md:mx-4">
@@ -67,6 +77,8 @@ const FolderSection: FC = () => {
             setReorder={setReorder}
             reorder={reorder}
             submitReorder={submitReorder}
+            disabled={isUpdateFoldersLoading || isFoldersLoading}
+            isUpdating={isUpdateFoldersLoading}
           />
         </div>
         <div className="flex-start flex w-full flex-row justify-center"></div>

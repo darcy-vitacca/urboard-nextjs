@@ -1,12 +1,21 @@
-import { Dispatch, FC, SetStateAction, useState } from "react";
-import Head from "next/head";
-import { useRouter } from "next/router";
-import { Folder, Prisma } from "@prisma/client";
+import { Dispatch, SetStateAction, useState } from "react";
 import { filterSearch } from "../filterSearch";
 import { trpc } from "../trpc";
+import { useQueryClient } from "react-query";
+import isEqual from "lodash/isEqual";
+
+export type Folder = {
+  id: string;
+  createdAt: Date;
+  updatedAt: Date;
+  userId: string;
+  name: string;
+  imageUrl: string | null;
+};
 
 type UseFolder = {
-  isLoading: boolean;
+  isFoldersLoading: boolean;
+  isUpdateFoldersLoading: boolean;
   searchTerm: string;
   setSearchTerm: Dispatch<SetStateAction<string>>;
   filteredSearchData: Folder[] | undefined;
@@ -17,11 +26,10 @@ type UseFolder = {
   submitReorder: () => void;
 };
 export const useFolder = (): UseFolder => {
+  const queryClient = useQueryClient();
   const [reorder, setReorder] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [reorderItems, setReorderItems] = useState<Folder[] | undefined>();
-
-  console.log("reorderItems", reorderItems);
 
   const { mutate, isLoading: isUpdateFoldersLoading } = trpc.useMutation(
     "protected.update-folder-order",
@@ -45,26 +53,24 @@ export const useFolder = (): UseFolder => {
       },
     }
   );
-  // console.log("reorderItems", reorderItems);
-
-  const isLoading = isFoldersLoading || isUpdateFoldersLoading;
 
   const filteredFolders =
     searchTerm !== "" ? filterSearch({ data: data, searchTerm }) : data;
 
   const submitReorder = () => {
-    //TODO check if any updates between data then mutate else don't
-    console.log("data", data);
-    //look at old items, then check which need to be updated and only mutate those
-    if (reorderItems) {
-      // mutate(reorderItems);
+    if (!isEqual(reorderItems, data)) {
+      if (reorderItems) {
+        queryClient.setQueryData(["protected.get-my-folders"], reorderItems);
+        mutate(reorderItems);
+      }
+    } else {
+      setReorder(false);
     }
   };
 
-  console.log("data", data);
-
   return {
-    isLoading,
+    isFoldersLoading,
+    isUpdateFoldersLoading,
     searchTerm,
     setSearchTerm,
     filteredSearchData: filteredFolders,

@@ -13,7 +13,7 @@ const FolderContent: FC<{ id: string }> = ({ id }) => {
   console.log("data", data);
 
   if (isLoading || !data) {
-  return <Spinner />;
+    return <Spinner absolute />;
   }
 
   return (
@@ -24,7 +24,7 @@ const FolderContent: FC<{ id: string }> = ({ id }) => {
   );
 };
 
-const FolderPage: FC = () => {
+const FolderPage: FC = (props) => {
   const { query } = useRouter();
   const { id } = query;
   if (!id || typeof id != "string") return <div>No id</div>;

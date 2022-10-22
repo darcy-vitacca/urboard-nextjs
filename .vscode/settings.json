@@ -1,3 +1,15 @@
 {
-    "WillLuke.nextjs.hasPrompted": true
+  "WillLuke.nextjs.hasPrompted": true,
+  "sqltools.connections": [
+    {
+      "previewLimit": 50,
+      "server": "localhost",
+      "port": 5432,
+      "driver": "PostgreSQL",
+      "database": "urboard",
+      "username": "darcy_pg",
+      "password": "pvrxkqhzxwqnzq",
+      "name": "postgres"
+    }
+  ]
 }

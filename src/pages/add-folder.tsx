@@ -38,7 +38,7 @@ const AddFolder = () => {
     mutate(data);
   };
   if (isLoading) {
-    return <Spinner />;
+    return <Spinner absolute />;
   }
 
   return (

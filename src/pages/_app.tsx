@@ -1,3 +1,4 @@
+import { createContext } from "react";
 // src/pages/_app.tsx
 import { httpBatchLink } from "@trpc/client/links/httpBatchLink";
 import { loggerLink } from "@trpc/client/links/loggerLink";
@@ -11,15 +12,20 @@ import "../styles/globals.css";
 
 import Layout from "../components/layout";
 
+
+
 const MyApp: AppType<{ session: Session | null }> = ({
   Component,
   pageProps: { session, ...pageProps },
 }) => {
+ 
   return (
     <SessionProvider session={session}>
-      <Layout>
-        <Component {...pageProps} />
-      </Layout>
+      <FolderContext.Provider value={{ folders: undefined }}>
+        <Layout>
+          <Component {...pageProps} />
+        </Layout>
+      </FolderContext.Provider>
     </SessionProvider>
   );
 };

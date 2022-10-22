@@ -1,7 +1,5 @@
 import { FC } from "react";
 import { useRouter } from "next/router";
-import { trpc } from "../utils/trpc";
-import { Spinner } from "../components/spinner/spinner";
 
 // const FolderContent: FC<{ id: string }> = ({ id }) => {
 //   const { data, isLoading, error } = trpc.useQuery([
@@ -15,7 +13,7 @@ import { Spinner } from "../components/spinner/spinner";
 //   return <div>Folder {id}</div>;
 // };
 
-const FolderPage: FC = () => {
+const FolderPage: FC = (props) => {
   const { query } = useRouter();
   const { id } = query;
   if (!id || typeof id != "string") return <div>No id</div>;

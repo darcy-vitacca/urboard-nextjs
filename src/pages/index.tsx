@@ -5,17 +5,12 @@ import { AuthStatus } from "../types/custom-next-auth";
 
 import { Spinner } from "../components/spinner/spinner";
 import FolderSection from "../components/folder/folder-section";
-import { useFolder } from "../utils/hooks/useFolder";
 
 const Home: NextPage = (props) => {
   const { data: session, status } = useSession();
 
-  console.log("session", session);
-
-  const { isLoading } = useFolder();
-
-  if (status === AuthStatus.LOADING || isLoading) {
-    return <Spinner />;
+  if (status === AuthStatus.LOADING) {
+    return <Spinner absolute />;
   }
 
   return (
@@ -23,9 +18,8 @@ const Home: NextPage = (props) => {
       <Head>
         <title>urboard</title>
         <meta name="description" content="urboard" />
-        {/* <link rel="icon" href="/favicon.ico" /> */}
       </Head>
-      {session ? (
+      {session?.user ? (
         <FolderSection />
       ) : (
         <>
