@@ -1,4 +1,4 @@
-import React, { Dispatch, FC, SetStateAction, useState } from "react";
+import React, { Dispatch, FC, useState } from "react";
 import {
   DndContext,
   closestCenter,
@@ -20,27 +20,17 @@ import {
 } from "@dnd-kit/sortable";
 
 import { FolderCard } from "./folder";
-import { Folder } from "../../utils/hooks/useFolder";
-
-export type Link = {
-  id: string;
-  createdAt: Date;
-  updatedAt: Date;
-  folderId: string;
-  userId: string;
-  name: string;
-  imageUrl: string | null;
-  url: string;
-};
+import { FolderAction } from "../../context/folder-reducer-types";
+import { Folder } from "../../types/folder";
 
 type SortableProps = {
   filteredSearchData: Folder[] | undefined;
-  reorderItems: Folder[] | Link[] | undefined;
-  setReorderItems: Dispatch<SetStateAction<Folder[] | Link[] | undefined>>;
+  reorderItems: Folder[] | undefined;
+  dispatch: Dispatch<FolderAction>;
 };
 
 type SortableItem = {
-  data: Folder | Link | undefined;
+  data: Folder | undefined;
 };
 const SortableItem: FC<SortableItem> = ({ data }) => {
   const { attributes, listeners, setNodeRef } =
@@ -60,13 +50,11 @@ const SortableItem: FC<SortableItem> = ({ data }) => {
   );
 };
 
-const SortableContainer: FC<SortableProps> = ({
-  reorderItems,
-  setReorderItems,
-}) => {
+const SortableContainer: FC<SortableProps> = ({ reorderItems, dispatch }) => {
   const [activeId, setActiveId] = useState<string | null | UniqueIdentifier>(
     null
   );
+
   const sensors = useSensors(
     useSensor(PointerSensor),
     useSensor(KeyboardSensor, {
@@ -90,10 +78,10 @@ const SortableContainer: FC<SortableProps> = ({
         ))}
       </SortableContext>
       <DragOverlay className="opacity-100">
-        {activeId ? (
+        {activeId && reorderItems ? (
           <SortableItem
             key={activeId}
-            data={reorderItems?.find((item) => item?.id === activeId)}
+            data={reorderItems?.find((item: Folder) => item?.id === activeId)}
           />
         ) : null}
       </DragOverlay>
@@ -112,13 +100,23 @@ const SortableContainer: FC<SortableProps> = ({
 
     if (active.id !== over?.id) {
       setActiveId(null);
-      setReorderItems((items) => {
-        const oldIndex = items?.findIndex((item) => item?.id === active?.id);
-        const newIndex = items?.findIndex((item) => item?.id === over?.id);
+      const newOrderedItems = () => {
+        const oldIndex = reorderItems?.findIndex(
+          (item) => item?.id === active?.id
+        );
+        const newIndex = reorderItems?.findIndex(
+          (item) => item?.id === over?.id
+        );
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         //@ts-ignore
-        const updatedArray = arrayMove(items, oldIndex, newIndex);
+        const updatedArray = arrayMove(reorderItems, oldIndex, newIndex);
         return updatedArray;
+      };
+
+      console.log("newOrderItems()", newOrderedItems());
+      dispatch({
+        type: "SET_UPDATED_FOLDER_ORDER",
+        reorderItems: newOrderedItems(),
       });
     }
   }

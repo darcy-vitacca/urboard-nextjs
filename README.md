@@ -19,9 +19,8 @@
 
 [X] - Add Search bar UI \
 [X] - Make search filter func decoupled \
-[] - Reorder of folders \
-[] - Why isn't my git commits registering
-[] - Abstract a folder reducer \
+[X] - Reorder of folders \
+[X] - Why isn't my git commits registering
 [] - Update cards/folders for home \
 [] - Add Tags to schema \
 [] - Add click count to schemas \

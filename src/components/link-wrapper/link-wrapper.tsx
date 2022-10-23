@@ -8,7 +8,9 @@ type ILinkWrapper = {
 
 export const LinkWrapper = ({ href, children, disabled }: ILinkWrapper) => {
   return href && !disabled ? (
-    <Link href={href}>{children}</Link>
+    <Link href={href} passHref>
+      {children}
+    </Link>
   ) : (
     <>{children}</>
   );

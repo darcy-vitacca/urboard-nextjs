@@ -1,5 +1,5 @@
-import { Link } from "../components/folder/folder-container";
-import { Folder } from "./hooks/useFolder";
+import { Folder } from "../types/folder";
+import { Link } from "../types/link";
 
 
 

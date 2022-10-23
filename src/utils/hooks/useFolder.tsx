@@ -3,15 +3,11 @@ import { filterSearch } from "../filterSearch";
 import { trpc } from "../trpc";
 import { useQueryClient } from "react-query";
 import isEqual from "lodash/isEqual";
-
-export type Folder = {
-  id: string;
-  createdAt: Date;
-  updatedAt: Date;
-  userId: string;
-  name: string;
-  imageUrl: string | null;
-};
+import { FolderAction, Folder } from "../../context/folder-reducer-types";
+import {
+  useFolderDispatch,
+  useFolderState,
+} from "../../context/folder-context";
 
 type UseFolder = {
   isFoldersLoading: boolean;
@@ -19,24 +15,24 @@ type UseFolder = {
   searchTerm: string;
   setSearchTerm: Dispatch<SetStateAction<string>>;
   filteredSearchData: Folder[] | undefined;
-  reorder: boolean;
-  setReorder: Dispatch<SetStateAction<boolean>>;
-  setReorderItems: Dispatch<SetStateAction<Folder[] | undefined>>;
-  reorderItems: Folder[] | undefined;
   submitReorder: () => void;
+  folderDispatch: Dispatch<FolderAction>;
 };
+
 export const useFolder = (): UseFolder => {
   const queryClient = useQueryClient();
-  const [reorder, setReorder] = useState(false);
+  const folderDispatch = useFolderDispatch();
+  const { reorder, reorderItems } = useFolderState();
   const [searchTerm, setSearchTerm] = useState("");
-  const [reorderItems, setReorderItems] = useState<Folder[] | undefined>();
 
   const { mutate, isLoading: isUpdateFoldersLoading } = trpc.useMutation(
     "protected.update-folder-order",
     {
       onSuccess: (data) => {
-        setReorderItems(data);
-        setReorder(false);
+        folderDispatch({
+          type: "SET_UPDATED_FOLDER_ORDER",
+          reorderItems: data,
+        });
       },
     }
   );
@@ -49,7 +45,7 @@ export const useFolder = (): UseFolder => {
       refetchOnWindowFocus: false,
       enabled: !reorder || !isUpdateFoldersLoading,
       onSuccess(data) {
-        setReorderItems(data);
+        folderDispatch({ type: "SET_FOLDERS", reorderItems: data });
       },
     }
   );
@@ -64,7 +60,7 @@ export const useFolder = (): UseFolder => {
         mutate(reorderItems);
       }
     } else {
-      setReorder(false);
+      folderDispatch({ type: "STOP_REORDER" });
     }
   };
 
@@ -74,10 +70,7 @@ export const useFolder = (): UseFolder => {
     searchTerm,
     setSearchTerm,
     filteredSearchData: filteredFolders,
-    reorder,
-    setReorder,
     submitReorder,
-    reorderItems,
-    setReorderItems,
+    folderDispatch,
   };
 };

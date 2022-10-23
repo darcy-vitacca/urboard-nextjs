@@ -1,62 +1,22 @@
-import { Dispatch, FC, SetStateAction } from "react";
-import { clsx } from "clsx";
-import { ArrowPathRoundedSquareIcon } from "@heroicons/react/24/outline";
+import { FC } from "react";
 import SearchBar from "../search/search";
 import { FolderCard } from "./folder";
 import SortableContainer from "./folder-container";
 import { useFolder } from "../../utils/hooks/useFolder";
 import { Spinner } from "../spinner/spinner";
-
-export const ReorderBtn: FC<{
-  reorder: boolean;
-  setReorder: Dispatch<SetStateAction<boolean>>;
-  submitReorder: () => void;
-  disabled: boolean;
-  isUpdating: boolean;
-}> = ({ reorder, setReorder, submitReorder, isUpdating, disabled }) => {
-  console.log("isUpdating", isUpdating);
-  console.log("disabled", disabled);
-
-  return (
-    <button
-      className="mt-3 flex w-12 flex-col justify-center text-center"
-      disabled={disabled}
-      onClick={() => (!reorder ? setReorder(true) : submitReorder())}
-    >
-      <div
-        className={clsx("flex flex-col justify-center text-center", {
-          ["rounded-xl border-black"]: reorder,
-        })}
-      >
-        <ArrowPathRoundedSquareIcon
-          className={clsx("m-auto block h-6 w-6 ", {
-            ["animate-spin text-teal-400"]: reorder || isUpdating,
-          })}
-        />
-        <label
-          htmlFor="search"
-          className=" block min-w-[50px] text-xs font-bold text-gray-700"
-        >
-          {isUpdating ? "Saving" : reorder ? "Save" : "Reorder"}
-        </label>
-      </div>
-    </button>
-  );
-};
+import { ActionBar } from "../action-bar/action-bar";
+import { useFolderState } from "../../context/folder-context";
 
 const FolderSection: FC = () => {
   const {
-    reorder,
     searchTerm,
     setSearchTerm,
     filteredSearchData,
-    setReorder,
-    submitReorder,
-    reorderItems,
-    setReorderItems,
+    folderDispatch,
     isFoldersLoading,
-    isUpdateFoldersLoading,
   } = useFolder();
+
+  const { reorder, reorderItems } = useFolderState();
 
   if (isFoldersLoading) {
     return <Spinner absolute />;
@@ -73,13 +33,7 @@ const FolderSection: FC = () => {
             setSearchTerm={setSearchTerm}
             filteredSearchData={filteredSearchData}
           />
-          <ReorderBtn
-            setReorder={setReorder}
-            reorder={reorder}
-            submitReorder={submitReorder}
-            disabled={isUpdateFoldersLoading || isFoldersLoading}
-            isUpdating={isUpdateFoldersLoading}
-          />
+          <ActionBar />
         </div>
         <div className="flex-start flex w-full flex-row justify-center"></div>
         {filteredSearchData?.length ? (
@@ -87,7 +41,7 @@ const FolderSection: FC = () => {
             <SortableContainer
               filteredSearchData={filteredSearchData}
               reorderItems={reorderItems}
-              setReorderItems={setReorderItems}
+              dispatch={folderDispatch}
             />
           ) : (
             filteredSearchData?.map((folder) => (

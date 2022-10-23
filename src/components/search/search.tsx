@@ -1,7 +1,7 @@
 import { ChangeEvent, Dispatch, FC, SetStateAction } from "react";
-import { Folder } from "../../utils/hooks/useFolder";
+import { Folder } from "../../types/folder";
+import { Link } from "../../types/link";
 import { useSearchShortcut } from "../../utils/hooks/useSearchShortcut";
-import { Link } from "../folder/folder-container";
 
 type SearchBarProps = {
   searchTerm: string;
@@ -12,7 +12,6 @@ type SearchBarProps = {
 const SearchBar: FC<SearchBarProps> = ({
   searchTerm,
   setSearchTerm,
-  filteredSearchData,
   disabled,
 }) => {
   const { searchFocusRef } = useSearchShortcut();
@@ -22,7 +21,7 @@ const SearchBar: FC<SearchBarProps> = ({
       <label htmlFor="search" className="block text-sm font-bold text-gray-700">
         Quick search
       </label>
-      <div className="relative mt-1   flex  items-center">
+      <div className="relative mt-1 flex items-center">
         <input
           type="text"
           name="search"

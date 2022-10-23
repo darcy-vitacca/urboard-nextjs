@@ -1,23 +1,23 @@
-import React from "react";
+import { useRouter } from "next/router";
+import { NextPage } from "next";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { trpc } from "../utils/trpc";
 
+import { zodResolver } from "@hookform/resolvers/zod";
 import {
   CreateFolderInputType,
   createFolderValidator,
 } from "../validators/create-folder-validator";
 import { Input } from "../components/input/input";
-import { trpc } from "../utils/trpc";
 import { Spinner } from "../components/spinner/spinner";
-import { useRouter } from "next/router";
+import { FC } from "react";
 
-const AddFolder = () => {
+const AddFolder: FC<NextPage> = () => {
   const router = useRouter();
   const {
     handleSubmit,
     formState: { errors },
     register,
-    watch,
     reset,
   } = useForm<CreateFolderInputType>({
     defaultValues: {

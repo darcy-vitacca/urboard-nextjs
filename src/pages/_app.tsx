@@ -10,6 +10,7 @@ import type { Session } from "next-auth";
 import "../styles/globals.css";
 
 import Layout from "../components/layout";
+import { FolderProvider } from "../context/folder-context";
 
 const MyApp: AppType<{ session: Session | null }> = ({
   Component,
@@ -17,9 +18,11 @@ const MyApp: AppType<{ session: Session | null }> = ({
 }) => {
   return (
     <SessionProvider session={session}>
-      <Layout>
-        <Component {...pageProps} />
-      </Layout>
+      <FolderProvider>
+        <Layout>
+          <Component {...pageProps} />
+        </Layout>
+      </FolderProvider>
     </SessionProvider>
   );
 };

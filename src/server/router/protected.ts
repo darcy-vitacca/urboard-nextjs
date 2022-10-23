@@ -2,30 +2,35 @@ import { createFolderValidator } from '../../validators/create-folder-validator'
 import { createProtectedRouter } from "./context";
 import { prisma } from "../db/client";
 import { z } from 'zod';
-import { Folder, Prisma } from '@prisma/client';
+import { createLinkValidator } from '../../validators/create-link-validator';
+import { handleFolderOrder } from '../../utils/fitlerOrder';
 
-
-export const handleOrder = ({ foldersData, order }: {
-  foldersData: Folder[], order: string[] | undefined
-}): Folder[] | undefined => {
-  if (order) {
-    foldersData.sort((a, b) => order?.indexOf(a.id) - order?.indexOf(b.id));
-  }
-  return foldersData
-}
 
 export const protectedRouter = createProtectedRouter()
   .mutation("create-folder", {
     input: createFolderValidator,
     async resolve({ input, ctx }) {
-
       if (!ctx?.session) throw new Error("Unauthorized");
-
       return await prisma.folder.create({
         data: {
           name: input.name,
           imageUrl: input.imageUrl,
           userId: ctx?.session?.user?.id,
+        },
+      });
+    },
+  })
+  .mutation("create-link", {
+    input: createLinkValidator,
+    async resolve({ input, ctx }) {
+      if (!ctx?.session) throw new Error("Unauthorized");
+      return await prisma.link.create({
+        data: {
+          name: input.name,
+          imageUrl: input.imageUrl,
+          url: input.url,
+          userId: ctx?.session?.user?.id,
+          folderId: input.folderId,
         },
       });
     },
@@ -57,7 +62,7 @@ export const protectedRouter = createProtectedRouter()
 
       console.log('data', data);
 
-      const folders = handleOrder({ foldersData: input, order: foldersOrder })
+      const folders = handleFolderOrder({ data: input, order: foldersOrder })
       return folders
     },
   })
@@ -74,26 +79,21 @@ export const protectedRouter = createProtectedRouter()
           order: true,
         },
       })
-
-      console.log('foldersOrder', foldersOrder);
-
-
       const foldersData = await prisma.folder.findMany({
         where: {
           userId: {
             equals: ctx?.session?.user?.id,
           },
         },
+        include: {
+          links: true,
+          linkOrders: true
+        }
       });
-
-
-
-      const order = foldersOrder?.order as Prisma.JsonArray ?? undefined;
-
-      const folders = handleOrder({ foldersData, order })
-
-      console.log('folders', folders);
-
+      const order = foldersOrder?.order as string[]
+        //  as Prisma.JsonArray 
+        ?? undefined;
+      const folders = handleFolderOrder({ data: foldersData, order })
       return folders;
     },
   })
