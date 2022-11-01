@@ -24,6 +24,7 @@ const FolderPage: NextPage = (props) => {
           <div className="flex flex-row justify-center">
             <button
               className="btn"
+              type="button"
               onClick={previousFolder}
               disabled={singleFolder}
             >
@@ -31,6 +32,7 @@ const FolderPage: NextPage = (props) => {
             </button>
             <button
               className="btn"
+              type="button"
               onClick={nextFolder}
               disabled={singleFolder}
             >

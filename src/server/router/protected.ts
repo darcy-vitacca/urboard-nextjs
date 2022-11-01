@@ -4,6 +4,7 @@ import { prisma } from "../db/client";
 import { z } from 'zod';
 import { createLinkValidator } from '../../validators/create-link-validator';
 import { handleFolderOrder } from '../../utils/fitlerOrder';
+import { updateFolderValidator } from '../../validators/update-folder-validator';
 
 
 export const protectedRouter = createProtectedRouter()
@@ -60,10 +61,26 @@ export const protectedRouter = createProtectedRouter()
         },
       })
 
-      console.log('data', data);
-
       const folders = handleFolderOrder({ data: input, order: foldersOrder })
       return folders
+    },
+  })
+  .mutation("update-folder", {
+    input: updateFolderValidator,
+    async resolve({ input, ctx }) {
+      if (!ctx?.session) throw new Error("Unauthorized");
+      return await prisma.folder.updateMany({
+        where: {
+          id: input?.id,
+          userId: ctx?.session?.user?.id,
+        },
+        data: {
+          name: input.name,
+          imageUrl: input.imageUrl,
+        },
+      })
+
+
     },
   })
   .query("get-my-folders", {
@@ -98,9 +115,7 @@ export const protectedRouter = createProtectedRouter()
     },
   })
   .query("get-folder-by-id", {
-    input: z.object({
-      id: z.string(),
-    }),
+    input: z.string(),
     async resolve({ input, ctx }) {
       if (!ctx?.session) throw new Error("Unauthorized");
 
@@ -108,7 +123,7 @@ export const protectedRouter = createProtectedRouter()
         where: {
           AND: [
             {
-              id: input.id,
+              id: input
             },
             {
               userId: ctx?.session?.user?.id,

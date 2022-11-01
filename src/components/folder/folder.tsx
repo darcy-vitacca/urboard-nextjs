@@ -6,10 +6,19 @@ type IFolderCard = {
   name: string;
   folderId: string;
   disabled: boolean;
+  edit: boolean;
 };
-export const FolderCard: FC<IFolderCard> = ({ name, folderId, disabled }) => {
+export const FolderCard: FC<IFolderCard> = ({
+  name,
+  folderId,
+  disabled,
+  edit,
+}) => {
   return (
-    <LinkWrapper href={`/folder/${folderId}`} disabled={disabled}>
+    <LinkWrapper
+      href={edit ? `/edit-folder/${folderId}` : `/folder/${folderId}`}
+      disabled={disabled}
+    >
       <div
         className={clsx(
           "group card relative flex h-28 w-28  items-center justify-center border border-black  p-2 shadow-xl  md:h-44 md:w-44",

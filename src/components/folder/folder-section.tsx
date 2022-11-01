@@ -16,7 +16,7 @@ const FolderSection: FC = () => {
     isFoldersLoading,
   } = useFolder();
 
-  const { reorder, reorderItems } = useFolderState();
+  const { reorder, reorderItems, edit } = useFolderState();
 
   if (isFoldersLoading) {
     return <Spinner absolute />;
@@ -50,6 +50,7 @@ const FolderSection: FC = () => {
                 name={folder?.name}
                 folderId={folder?.id}
                 disabled={reorder}
+                edit={edit}
               />
             ))
           )

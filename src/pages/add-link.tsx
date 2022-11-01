@@ -35,7 +35,6 @@ const AddLink: NextPage = (props) => {
   const { mutate, isLoading } = trpc.useMutation("protected.create-link", {
     onSuccess: (data) => {
       console.log("data", data);
-      debugger;
       reset();
       router.push(`/folder/${data?.id}`);
     },

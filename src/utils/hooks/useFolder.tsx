@@ -1,9 +1,10 @@
 import { Dispatch, SetStateAction, useState } from "react";
+import { Folder } from "../../types/folder";
 import { filterSearch } from "../filterSearch";
 import { trpc } from "../trpc";
 import { useQueryClient } from "react-query";
 import isEqual from "lodash/isEqual";
-import { FolderAction, Folder } from "../../context/folder-reducer-types";
+import { FolderAction } from "../../context/folder-reducer-types";
 import {
   useFolderDispatch,
   useFolderState,
@@ -41,7 +42,7 @@ export const useFolder = (): UseFolder => {
     ["protected.get-my-folders"],
     {
       refetchOnReconnect: false,
-      refetchOnMount: false,
+      refetchOnMount: true,
       refetchOnWindowFocus: false,
       enabled: !reorder || !isUpdateFoldersLoading,
       onSuccess(data) {

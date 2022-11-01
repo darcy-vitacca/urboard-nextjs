@@ -6,3 +6,5 @@ export const createFolderValidator = z.object({
 });
 
 export type CreateFolderInputType = z.infer<typeof createFolderValidator>;
+
+
