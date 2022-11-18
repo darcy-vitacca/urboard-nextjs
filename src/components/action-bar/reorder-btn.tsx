@@ -1,21 +1,21 @@
-import { Dispatch, FC } from "react";
+import { FC } from "react";
 import { clsx } from "clsx";
 import { ArrowPathRoundedSquareIcon } from "@heroicons/react/24/outline";
-import { FolderAction } from "../../context/folder-reducer-types";
+import { IAction } from "./action-bar";
 
-export const ReorderBtn: FC<{
-  reorder: boolean;
-  folderDispatch: Dispatch<FolderAction>;
-  submitReorder: () => void;
-  disabled: boolean;
-  isUpdating: boolean;
-}> = ({ reorder, submitReorder, folderDispatch, isUpdating, disabled }) => {
+export const ReorderBtn: FC<IAction> = ({
+  reorder,
+  submitReorder,
+  dispatch,
+  isUpdating,
+  disabled,
+}) => {
   return (
     <button
       className="mt-3 flex w-12 flex-col justify-center text-center"
       disabled={disabled}
       onClick={() =>
-        !reorder ? folderDispatch({ type: "START_REORDER" }) : submitReorder()
+        !reorder ? dispatch({ type: "START_REORDER" }) : submitReorder()
       }
     >
       <div

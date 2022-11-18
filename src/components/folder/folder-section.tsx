@@ -6,6 +6,8 @@ import { useFolder } from "../../utils/hooks/useFolder";
 import { Spinner } from "../spinner/spinner";
 import { ActionBar } from "../action-bar/action-bar";
 import { useFolderState } from "../../context/folder-context";
+import { FolderDnD } from "./folder-dnd-hoc";
+import { DragOverlay } from "@dnd-kit/core";
 
 const FolderSection: FC = () => {
   const {
@@ -14,9 +16,11 @@ const FolderSection: FC = () => {
     filteredSearchData,
     folderDispatch,
     isFoldersLoading,
+    isUpdateFoldersLoading,
+    submitReorder,
   } = useFolder();
 
-  const { reorder, reorderItems, edit } = useFolderState();
+  const { reorder, reorderItems, activeFolder } = useFolderState();
 
   if (isFoldersLoading) {
     return <Spinner absolute />;
@@ -33,7 +37,13 @@ const FolderSection: FC = () => {
             setSearchTerm={setSearchTerm}
             filteredSearchData={filteredSearchData}
           />
-          <ActionBar />
+          <ActionBar
+            dispatch={folderDispatch}
+            submitReorder={submitReorder}
+            disabled={isUpdateFoldersLoading || isFoldersLoading}
+            isUpdating={isUpdateFoldersLoading}
+            reorder={reorder}
+          />
         </div>
         <div className="flex-start flex w-full flex-row justify-center"></div>
         {filteredSearchData?.length ? (
@@ -42,17 +52,32 @@ const FolderSection: FC = () => {
               filteredSearchData={filteredSearchData}
               reorderItems={reorderItems}
               dispatch={folderDispatch}
+              dispatchAction="SET_UPDATED_FOLDER_ORDER"
+              folder
             />
           ) : (
-            filteredSearchData?.map((folder) => (
-              <FolderCard
-                key={folder?.id}
-                name={folder?.name}
-                folderId={folder?.id}
-                disabled={reorder}
-                edit={edit}
-              />
-            ))
+            <>
+              {filteredSearchData?.map((folder) => {
+                return (
+                  <FolderDnD folder={folder} key={folder?.id}>
+                    <FolderCard
+                      name={folder?.name}
+                      folderId={folder?.id}
+                      disabled={reorder}
+                    />
+                  </FolderDnD>
+                );
+              })}
+              <DragOverlay>
+                {activeFolder ? (
+                  <FolderCard
+                    name={activeFolder?.name}
+                    folderId={activeFolder?.id}
+                    disabled={true}
+                  />
+                ) : null}
+              </DragOverlay>
+            </>
           )
         ) : (
           <p>No folders found</p>

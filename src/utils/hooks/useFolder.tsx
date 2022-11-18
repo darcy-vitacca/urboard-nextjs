@@ -1,6 +1,6 @@
 import { Dispatch, SetStateAction, useState } from "react";
 import { Folder } from "../../types/folder";
-import { filterSearch } from "../filterSearch";
+
 import { trpc } from "../trpc";
 import { useQueryClient } from "react-query";
 import isEqual from "lodash/isEqual";
@@ -9,6 +9,7 @@ import {
   useFolderDispatch,
   useFolderState,
 } from "../../context/folder-context";
+import { filterSearchFolder } from "../filterSearch";
 
 type UseFolder = {
   isFoldersLoading: boolean;
@@ -29,12 +30,8 @@ export const useFolder = (): UseFolder => {
   const { mutate, isLoading: isUpdateFoldersLoading } = trpc.useMutation(
     "protected.update-folder-order",
     {
-      onSuccess: (data) => {
-        folderDispatch({
-          type: "SET_UPDATED_FOLDER_ORDER",
-          reorderItems: data,
-        });
-      },
+      onSuccess: () =>
+        queryClient.invalidateQueries("protected.get-my-folders"),
     }
   );
 
@@ -42,7 +39,7 @@ export const useFolder = (): UseFolder => {
     ["protected.get-my-folders"],
     {
       refetchOnReconnect: false,
-      refetchOnMount: true,
+      refetchOnMount: false,
       refetchOnWindowFocus: false,
       enabled: !reorder || !isUpdateFoldersLoading,
       onSuccess(data) {
@@ -52,7 +49,7 @@ export const useFolder = (): UseFolder => {
   );
 
   const filteredFolders =
-    searchTerm !== "" ? filterSearch({ data: data, searchTerm }) : data;
+    searchTerm !== "" ? filterSearchFolder({ data: data, searchTerm }) : data;
 
   const submitReorder = () => {
     if (!isEqual(reorderItems, data)) {

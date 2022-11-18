@@ -4,47 +4,61 @@ import {
 } from '@heroicons/react/24/outline'
 
 export type INavItem = {
+    id: string;
     toolTip: string;
     Icon: (props: React.ComponentProps<'svg'>) => JSX.Element
-    href: string;
+    href?: string;
 };
 
 
 export const navItems: INavItem[] = [
     {
+        id: 'home',
         toolTip: "Home",
         Icon: HomeIcon,
-        href: "/"
+        href: "/",
+
     },
     {
+        id: 'addFolder',
         toolTip: "Add Folder",
         Icon: FolderIcon,
-        href: "/add-folder"
+        href: "/add-folder",
+
     },
     {
+        id: 'edit',
+        toolTip: "Drag item to Edit",
+        Icon: PencilSquareIcon,
+        href: "/edit",
+
+    },
+    {
+        id: 'addLink',
         toolTip: "Add Link",
         Icon: LinkIcon,
-        href: "/add-link"
+        href: "/add-link",
+
     },
     {
-        toolTip: "Edit",
-        Icon: PencilSquareIcon,
-        href: "/edit"
-    },
-    {
-        toolTip: "Delete",
-        Icon: TrashIcon,
-        href: "/"
-    },
-    {
+        id: 'settings',
         toolTip: "Settings",
         Icon: Cog8ToothIcon,
-        href: "/settings"
+        href: "/settings",
+
+    },
+    {
+        id: 'delete',
+        toolTip: "Drag item to Delete",
+        Icon: TrashIcon,
+        href: "/",
+
     },
 ];
 
 export const logoutMenuItem: INavItem = {
     toolTip: "Logout",
     Icon: ArrowLeftOnRectangleIcon,
-    href: "/"
+    href: "/",
+    id: 'logout'
 }

@@ -11,6 +11,7 @@ import "../styles/globals.css";
 
 import Layout from "../components/layout";
 import { FolderProvider } from "../context/folder-context";
+import { ReactQueryDevtools } from "react-query/devtools";
 
 const MyApp: AppType<{ session: Session | null }> = ({
   Component,
@@ -20,6 +21,9 @@ const MyApp: AppType<{ session: Session | null }> = ({
     <SessionProvider session={session}>
       <FolderProvider>
         <Layout>
+          {process.env.NODE_ENV !== "production" && (
+            <ReactQueryDevtools initialIsOpen={false} />
+          )}
           <Component {...pageProps} />
         </Layout>
       </FolderProvider>
@@ -46,6 +50,9 @@ export default withTRPC<AppRouter>({
         httpBatchLink({ url }),
       ],
       url,
+      queryClientConfig: {
+        defaultOptions: { queries: { refetchOnMount: false } },
+      },
       transformer: superjson,
     };
   },

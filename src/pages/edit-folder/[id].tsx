@@ -10,7 +10,7 @@ import { useQueryClient } from "react-query";
 const FolderPage: NextPage = (props) => {
   const router = useRouter();
   const queryClient = useQueryClient();
-  const { id } = router.query;
+  const { id } = router.query as { id: string };
 
   if (!id || typeof id != "string") {
     router.push("/");
@@ -25,7 +25,6 @@ const FolderPage: NextPage = (props) => {
     handleSubmit,
     formState: { errors },
     register,
-    reset,
   } = useForm<UpdateFolderInputType>({
     defaultValues: {
       name: "",

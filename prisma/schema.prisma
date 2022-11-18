@@ -98,6 +98,6 @@ model LinkOrder {
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
     folder    Folder   @relation(fields: [folderId], references: [id], onDelete: Cascade)
-    folderId  String
+    folderId  String @unique
     order    Json  
 }

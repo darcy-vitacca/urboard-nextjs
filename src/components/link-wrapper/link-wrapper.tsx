@@ -12,6 +12,6 @@ export const LinkWrapper = ({ href, children, disabled }: ILinkWrapper) => {
       {children}
     </Link>
   ) : (
-    <>{children}</>
+    <div>{children}</div>
   );
 };

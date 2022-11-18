@@ -34,22 +34,18 @@ const AddLink: NextPage = (props) => {
 
   const { mutate, isLoading } = trpc.useMutation("protected.create-link", {
     onSuccess: (data) => {
-      console.log("data", data);
       reset();
       router.push(`/folder/${data?.id}`);
     },
   });
 
-  const { data, isLoading: isFoldersLoading } = trpc.useQuery(
+  const { data: folderData, isLoading: isFoldersLoading } = trpc.useQuery(
     ["protected.get-my-folders"],
     {
       refetchOnReconnect: false,
       refetchOnMount: false,
       refetchOnWindowFocus: false,
       enabled: !isLoading,
-      onSuccess(data) {
-        console.log("data", data);
-      },
     }
   );
 
@@ -59,15 +55,19 @@ const AddLink: NextPage = (props) => {
   if (isLoading || isFoldersLoading) {
     return <Spinner absolute />;
   }
+  if (!folderData?.length) {
+    return <p>Something went wrong</p>;
+  }
 
+  debugger;
   const folderOptions =
-    data?.map((folder) => ({
+    folderData?.map((folder) => ({
       label: folder.name,
       value: folder.id,
     })) ?? [];
 
-  const selectedFolder = data?.length
-    ? data?.find((folder: Folder) => folder?.id === watch("folderId"))
+  const selectedFolder = folderData?.length
+    ? folderData?.find((folder: Folder) => folder?.id === watch("folderId"))
     : null;
 
   return (

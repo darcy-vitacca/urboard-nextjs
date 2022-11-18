@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React, { Dispatch, FC, useState } from "react";
 import {
   DndContext,
@@ -22,35 +23,55 @@ import {
 import { FolderCard } from "./folder";
 import { FolderAction } from "../../context/folder-reducer-types";
 import { Folder } from "../../types/folder";
+import { Link } from "../../types/link";
+import { LinkCard } from "../link/link";
 
 type SortableProps = {
-  filteredSearchData: Folder[] | undefined;
-  reorderItems: Folder[] | undefined;
+  filteredSearchData: Folder[] | Link[] | undefined;
+  reorderItems: Folder[] | Link[] | undefined;
   dispatch: Dispatch<FolderAction>;
+  dispatchAction: "SET_UPDATED_FOLDER_ORDER" | "SET_UPDATED_LINKS_ORDER";
+  folder?: boolean;
 };
 
 type SortableItem = {
-  data: Folder | undefined;
+  data: Folder | Link | undefined;
+  folder?: boolean;
 };
-const SortableItem: FC<SortableItem> = ({ data }) => {
-  const { attributes, listeners, setNodeRef } =
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    //@ts-ignore
-    useSortable({ id: data?.id });
+const SortableItem: FC<SortableItem> = ({ data, folder }) => {
+  const { attributes, listeners, setNodeRef } = useSortable({ id: data?.id });
 
-  return (
+  if (folder && data?.name && data?.id) {
+    return (
+      <div ref={setNodeRef} {...attributes} {...listeners}>
+        <FolderCard
+          key={data?.id}
+          name={data?.name}
+          folderId={data?.id}
+          disabled={true}
+        />
+      </div>
+    );
+  } else if (data?.name && data?.id && "url" in data) {
     <div ref={setNodeRef} {...attributes} {...listeners}>
-      <FolderCard
+      <LinkCard
         key={data?.id}
-        name={data?.name ?? ""}
-        folderId={data?.id ?? ""}
+        name={data?.name}
+        url={data?.url}
+        linkId={data?.id}
         disabled={true}
       />
-    </div>
-  );
+    </div>;
+  }
+  return <></>;
 };
 
-const SortableContainer: FC<SortableProps> = ({ reorderItems, dispatch }) => {
+const SortableContainer: FC<SortableProps> = ({
+  reorderItems,
+  dispatch,
+  dispatchAction,
+  folder,
+}) => {
   const [activeId, setActiveId] = useState<string | null | UniqueIdentifier>(
     null
   );
@@ -74,7 +95,7 @@ const SortableContainer: FC<SortableProps> = ({ reorderItems, dispatch }) => {
         strategy={verticalListSortingStrategy}
       >
         {reorderItems?.map((item) => (
-          <SortableItem key={item?.id} data={item} />
+          <SortableItem key={item?.id} data={item} folder={folder} />
         ))}
       </SortableContext>
       <DragOverlay className="opacity-100">
@@ -82,6 +103,7 @@ const SortableContainer: FC<SortableProps> = ({ reorderItems, dispatch }) => {
           <SortableItem
             key={activeId}
             data={reorderItems?.find((item: Folder) => item?.id === activeId)}
+            folder={folder}
           />
         ) : null}
       </DragOverlay>
@@ -107,15 +129,13 @@ const SortableContainer: FC<SortableProps> = ({ reorderItems, dispatch }) => {
         const newIndex = reorderItems?.findIndex(
           (item) => item?.id === over?.id
         );
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        //@ts-ignore
+
         const updatedArray = arrayMove(reorderItems, oldIndex, newIndex);
         return updatedArray;
       };
 
-      console.log("newOrderItems()", newOrderedItems());
       dispatch({
-        type: "SET_UPDATED_FOLDER_ORDER",
+        type: dispatchAction,
         reorderItems: newOrderedItems(),
       });
     }

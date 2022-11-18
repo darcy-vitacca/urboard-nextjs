@@ -1,19 +1,21 @@
 import { FC } from "react";
 import Image from "next/image";
 import { useSession } from "next-auth/react";
-import { INavItem, logoutMenuItem, navItems } from "../../constants/nav";
+import { INavItem, navItems } from "../../constants/nav";
 import { LinkWrapper } from "../link-wrapper/link-wrapper";
+import { useDroppable } from "@dnd-kit/core";
+import { clsx } from "clsx";
 
 type ITooltip = { toolTip: string };
 export const Tooltip: FC<ITooltip> = ({ toolTip }) => {
   return (
-    <span className="min-w-4 pointer-events-none absolute left-full top-1/2 z-50 ml-4 -translate-y-1/2 rounded bg-gray-900 px-8 py-1.5 text-base font-medium text-white opacity-0 group-hover:opacity-100 ">
+    <span className="pointer-events-none absolute left-full top-1/2 z-50 ml-4 w-32 -translate-y-1/2 rounded bg-gray-900 px-2 py-1.5 text-center text-base font-medium text-white opacity-0 group-hover:opacity-100">
       {toolTip}
     </span>
   );
 };
 
-export const NavIcons: FC<INavItem> = ({ toolTip, Icon, href }) => {
+export const NavIcon: FC<INavItem> = ({ toolTip, Icon, href }) => {
   return (
     <LinkWrapper href={href}>
       <li className="group group relative my-1 flex cursor-pointer justify-center rounded-xl p-2 text-white hover:bg-white">
@@ -26,6 +28,27 @@ export const NavIcons: FC<INavItem> = ({ toolTip, Icon, href }) => {
         <Tooltip toolTip={toolTip} />
       </li>
     </LinkWrapper>
+  );
+};
+
+export const DroppableNavIcon: FC<INavItem> = ({ toolTip, Icon, id }) => {
+  const { setNodeRef, isOver } = useDroppable({
+    id,
+  });
+
+  return (
+    <li
+      ref={setNodeRef}
+      className={clsx(
+        "group group relative my-1 flex  justify-center rounded-xl p-2 text-white hover:bg-white",
+        {
+          ["bg-white text-slate-900"]: isOver,
+        }
+      )}
+    >
+      {Icon && <Icon className="m-0 h-7 w-7 group-hover:text-gray-900 " />}
+      <Tooltip toolTip={toolTip} />
+    </li>
   );
 };
 
@@ -48,14 +71,27 @@ const Sidebar = () => {
         </div>
         <nav className="mt-2 p-1.5">
           <ul className="flex  flex-col justify-center border-t border-gray-100 pt-4 ">
-            {navItems?.map((item) => (
-              <NavIcons
-                key={item?.toolTip}
-                toolTip={item?.toolTip}
-                href={item?.href}
-                Icon={item?.Icon}
-              />
-            ))}
+            {navItems?.map((item) => {
+              if (item?.id === "edit" || item?.id === "delete") {
+                return (
+                  <DroppableNavIcon
+                    key={item?.id}
+                    toolTip={item?.toolTip}
+                    Icon={item?.Icon}
+                    id={item?.id}
+                  />
+                );
+              }
+              return (
+                <NavIcon
+                  key={item?.id}
+                  toolTip={item?.toolTip}
+                  href={item?.href}
+                  Icon={item?.Icon}
+                  id={item?.id}
+                />
+              );
+            })}
           </ul>
         </nav>
       </div>

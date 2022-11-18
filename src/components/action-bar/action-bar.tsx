@@ -1,28 +1,29 @@
-import { useFolderState } from "../../context/folder-context";
-import { useFolder } from "../../utils/hooks/useFolder";
-import { EditBtn } from "./edit-btn";
+import { Dispatch, FC } from "react";
 import { ReorderBtn } from "./reorder-btn";
 
-export const ActionBar = () => {
-  const {
-    folderDispatch,
-    submitReorder,
-    isFoldersLoading,
-    isUpdateFoldersLoading,
-  } = useFolder();
-
-  const { reorder, edit } = useFolderState();
-
+export interface IAction {
+  reorder: boolean;
+  dispatch: Dispatch<any>;
+  submitReorder: () => void;
+  disabled: boolean;
+  isUpdating: boolean;
+}
+export const ActionBar: FC<IAction> = ({
+  dispatch,
+  submitReorder,
+  reorder,
+  disabled,
+  isUpdating,
+}) => {
   return (
     <div className="flex w-full flex-row justify-center">
       <ReorderBtn
-        folderDispatch={folderDispatch}
+        dispatch={dispatch}
         reorder={reorder}
         submitReorder={submitReorder}
-        disabled={isUpdateFoldersLoading || isFoldersLoading}
-        isUpdating={isUpdateFoldersLoading}
+        disabled={disabled}
+        isUpdating={isUpdating}
       />
-      <EditBtn folderDispatch={folderDispatch} edit={edit} />
     </div>
   );
 };
