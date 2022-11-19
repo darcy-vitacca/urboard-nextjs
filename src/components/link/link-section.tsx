@@ -27,13 +27,14 @@ const LinkSection: FC<ILinkSection> = ({ id }) => {
     isFoldersLoading,
     isUpdateLinksLoading,
     submitReorder,
+    isFoldersFetching,
   } = useLinks({ id });
 
   const { reorder, activeLink } = useFolderState();
 
   console.log("isFoldersLoading", isFoldersLoading);
 
-  if (isFoldersLoading) {
+  if (isFoldersLoading || isFoldersFetching) {
     return <Spinner absolute />;
   }
 

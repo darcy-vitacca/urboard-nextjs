@@ -10,7 +10,9 @@ export const useUpdateLink = ({ folderId }: { folderId: string }) => {
         "protected.update-link",
         {
             onSuccess: async () => {
-                queryClient.refetchQueries(["protected.get-my-folders"]);
+                queryClient.invalidateQueries({
+                    queryKey: ["protected.get-my-folders"],
+                })
                 router.push(`/folder/${folderId ?? ""}`);
             },
         }

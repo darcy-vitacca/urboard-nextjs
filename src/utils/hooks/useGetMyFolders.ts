@@ -4,7 +4,7 @@ import { trpc } from "../trpc";
 export const useGetMyFolders = ({ reorder = false, isLoading = false }: { reorder?: boolean, isLoading?: boolean }) => {
     const folderDispatch = useFolderDispatch();
 
-    const { data, isLoading: isFoldersLoading } = trpc.useQuery(
+    const { data, isLoading: isFoldersLoading, isFetching: isFoldersFetching } = trpc.useQuery(
         ["protected.get-my-folders"],
         {
             refetchOnReconnect: false,
@@ -20,5 +20,6 @@ export const useGetMyFolders = ({ reorder = false, isLoading = false }: { reorde
     return {
         data,
         isFoldersLoading,
+        isFoldersFetching,
     }
 }

@@ -35,7 +35,7 @@ export const useLinks = ({ id }: IUseLinkProps) => {
     }
   );
 
-  const { data, isFoldersLoading } = useGetMyFolders({
+  const { data, isFoldersLoading, isFoldersFetching } = useGetMyFolders({
     reorder,
     isLoading: isUpdateLinksLoading,
   });
@@ -92,6 +92,7 @@ export const useLinks = ({ id }: IUseLinkProps) => {
     searchTerm,
     submitReorder,
     isFoldersLoading,
+    isFoldersFetching,
     isUpdateLinksLoading,
   };
 };
