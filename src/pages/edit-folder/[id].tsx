@@ -17,8 +17,9 @@ const FolderPage: NextPage = (props) => {
   }
 
   const { data, isLoading, isFetching } = useGetFolderById({ id });
+  const loading = isLoading || isFetching;
 
-  if (isLoading || isFetching) {
+  if (loading) {
     return <Spinner absolute />;
   }
 
@@ -40,13 +41,13 @@ const FolderForm = ({ data, id }: { data: Folder; id: string }) => {
     },
   });
 
-  const { mutate, updateLoading } = useUpdateFolder();
+  const { mutate, isUpdateFoldersLoading } = useUpdateFolder();
 
   const onSubmit: SubmitHandler<UpdateFolderInputType> = (formData) => {
     mutate({ ...formData, id });
   };
 
-  if (updateLoading) {
+  if (isUpdateFoldersLoading) {
     return <Spinner absolute />;
   }
 

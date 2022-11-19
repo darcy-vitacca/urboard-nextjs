@@ -11,7 +11,7 @@ import {
 } from "../../context/folder-context";
 import { filterSearchFolder } from "../filterSearch";
 import { useGetMyFolders } from "./useGetMyFolders";
-import { useUpdateFolder } from "./useUpdateFolderOrder";
+import { useUpdateFolder } from "./useUpdateFolder";
 
 type UseFolder = {
   isFoldersLoading: boolean;

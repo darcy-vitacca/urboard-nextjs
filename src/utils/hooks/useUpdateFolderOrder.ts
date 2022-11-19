@@ -8,7 +8,9 @@ export const useUpdateFolderOrder = () => {
         "protected.update-folder-order",
         {
             onSuccess: () =>
-                queryClient.invalidateQueries("protected.get-my-folders"),
+                queryClient.invalidateQueries({
+                    queryKey: ["protected.get-my-folders"],
+                }),
         }
     );
 

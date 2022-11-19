@@ -22,8 +22,9 @@ const LinkPage: NextPage = (props) => {
   }
 
   const { data, isLoading, isFetching } = useGetLinkById({ id });
+  const loading = isLoading || isFetching;
 
-  if (!data && (isLoading || isFetching)) {
+  if (loading) {
     return <Spinner absolute />;
   }
 
@@ -38,6 +39,7 @@ const LinkForm = ({ data, id }: { data: Link; id: string }) => {
   const { data: folderData, isFoldersLoading } = useGetMyFolders({});
 
   const { mutate, updateLoading } = useUpdateLink({ folderId: data?.folderId });
+  const isLoading = isFoldersLoading || updateLoading;
   const {
     handleSubmit,
     formState: { errors },
@@ -52,15 +54,11 @@ const LinkForm = ({ data, id }: { data: Link; id: string }) => {
     resolver: zodResolver(createLinkValidator),
   });
 
-  if (!folderData?.length) {
-    return <p>No Folders Found</p>;
-  }
-
   const onSubmit: SubmitHandler<CreateLinkInputType> = (formData) => {
     mutate({ ...formData, id });
   };
 
-  if (!data && (isFoldersLoading || updateLoading)) {
+  if (isLoading) {
     return <Spinner absolute />;
   }
 

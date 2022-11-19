@@ -5,20 +5,16 @@ import { trpc } from "../trpc";
 export const useUpdateFolder = () => {
     const router = useRouter();
     const queryClient = useQueryClient();
-    const { mutate, isLoading: updateLoading } = trpc.useMutation(
+    const { mutate, isLoading: isUpdateFoldersLoading } = trpc.useMutation(
         "protected.update-folder",
         {
             onSuccess: async () => {
-                await queryClient.refetchQueries(["protected.get-my-folders"], {
-                    active: false,
-                    exact: true,
-                    inactive: true,
-                });
+                await queryClient.refetchQueries(["protected.get-my-folders"]);
 
                 router.push(`/`);
             },
         }
     );
 
-    return { mutate, updateLoading }
+    return { mutate, isUpdateFoldersLoading }
 }

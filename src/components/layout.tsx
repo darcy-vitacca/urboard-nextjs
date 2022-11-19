@@ -28,8 +28,10 @@ const Layout: FC<ILayout> = ({ children }) => {
     {
       onSuccess: (data) => {
         dispatchFolder({ type: "SET_FOLDERS", reorderItems: data });
-        queryClient.invalidateQueries("protected.get-my-folders");
-        router.push("/");
+        queryClient.invalidateQueries({
+          queryKey: ["protected.get-my-folders"],
+        }),
+          router.push("/");
       },
     }
   );
@@ -38,7 +40,9 @@ const Layout: FC<ILayout> = ({ children }) => {
     {
       onSuccess: (data) => {
         dispatchFolder({ type: "SET_FOLDERS", reorderItems: data });
-        queryClient.invalidateQueries("protected.get-my-folders");
+        queryClient.invalidateQueries({
+          queryKey: ["protected.get-my-folders"],
+        });
       },
     }
   );

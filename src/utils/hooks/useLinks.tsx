@@ -29,7 +29,9 @@ export const useLinks = ({ id }: IUseLinkProps) => {
     "protected.update-links-order",
     {
       onSuccess: () =>
-        queryClient.invalidateQueries("protected.get-my-folders"),
+        queryClient.invalidateQueries({
+          queryKey: ["protected.get-my-folders"],
+        }),
     }
   );
 

@@ -31,6 +31,8 @@ const LinkSection: FC<ILinkSection> = ({ id }) => {
 
   const { reorder, activeLink } = useFolderState();
 
+  console.log("isFoldersLoading", isFoldersLoading);
+
   if (isFoldersLoading) {
     return <Spinner absolute />;
   }
