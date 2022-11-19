@@ -6,6 +6,7 @@ import { createLinkValidator } from '../../validators/create-link-validator';
 import { handleFolderOrder } from '../../utils/fitlerOrder';
 import { updateFolderValidator } from '../../validators/update-folder-validator';
 import { Folder } from '../../types/folder';
+import { updateLinkValidator } from '../../validators/update-link-validators';
 
 const handleGetFolders = async ({ userId }: { userId: string }) => {
   const foldersOrder = await prisma.foldersOrder.findFirst({
@@ -32,7 +33,7 @@ const handleGetFolders = async ({ userId }: { userId: string }) => {
   const order = foldersOrder?.order as string[]
     ?? undefined;
 
-  return { foldersData, order };
+  return { foldersData, order } as { foldersData: Folder[], order: string[] | undefined };
 }
 
 export const protectedRouter = createProtectedRouter()
@@ -54,6 +55,24 @@ export const protectedRouter = createProtectedRouter()
     async resolve({ input, ctx }) {
       if (!ctx?.session) throw new Error("Unauthorized");
       await prisma.folder.deleteMany({
+        where: {
+          id: input,
+          userId: ctx?.session?.user?.id,
+        },
+      })
+
+      const { foldersData, order } = await handleGetFolders({
+        userId: ctx?.session?.user?.id,
+      });
+      const folders = handleFolderOrder({ foldersData, order })
+      return folders;
+    },
+  })
+  .mutation("delete-link", {
+    input: z.string(),
+    async resolve({ input, ctx }) {
+      if (!ctx?.session) throw new Error("Unauthorized");
+      await prisma.link.deleteMany({
         where: {
           id: input,
           userId: ctx?.session?.user?.id,
@@ -168,6 +187,28 @@ export const protectedRouter = createProtectedRouter()
 
     },
   })
+  .mutation("update-link", {
+    input: updateLinkValidator,
+    async resolve({ input, ctx }) {
+      if (!ctx?.session) throw new Error("Unauthorized");
+
+      console.log('input.id', input.id);
+
+      return await prisma.link.updateMany({
+        where: {
+          id: input?.id,
+          userId: ctx?.session?.user?.id,
+        },
+        data: {
+          name: input.name,
+          imageUrl: input.imageUrl,
+          url: input.url,
+        },
+      })
+
+
+    },
+  })
   .query("get-my-folders", {
     async resolve({ ctx }) {
 
@@ -185,6 +226,29 @@ export const protectedRouter = createProtectedRouter()
       if (!ctx?.session) throw new Error("Unauthorized");
 
       return await prisma.folder.findFirst({
+        where: {
+          AND: [
+            {
+              id: input
+            },
+            {
+              userId: ctx?.session?.user?.id,
+            },
+          ]
+        },
+        include: {
+          links: true,
+          linkOrders: true
+        }
+      });
+    },
+  })
+  .query("get-link-by-id", {
+    input: z.string(),
+    async resolve({ input, ctx }) {
+      if (!ctx?.session) throw new Error("Unauthorized");
+
+      return await prisma.link.findFirst({
         where: {
           AND: [
             {

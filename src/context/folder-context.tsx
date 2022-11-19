@@ -7,6 +7,7 @@ export const initialState = {
   edit: false,
   reorderItems: undefined,
   activeFolder: undefined,
+  activeLink: undefined,
 };
 
 export const folderReducer = (state: State, action: FolderAction) => {
@@ -22,13 +23,8 @@ export const folderReducer = (state: State, action: FolderAction) => {
         ) ?? -1;
 
       if (index !== -1 && state.reorderItems) {
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        //@ts-ignore
-        state?.reorderItems[index]?.links.splice(
-          index,
-          0,
-          action?.reorderItems
-        );
+        // @ts-ignore
+        state.reorderItems[index].links = action?.reorderItems;
       }
       return;
     case "SET_FOLDERS":
@@ -51,6 +47,9 @@ export const folderReducer = (state: State, action: FolderAction) => {
       return;
     case "SET_ACTIVE_FOLDER":
       state.activeFolder = action?.activeFolder;
+      return;
+    case "SET_ACTIVE_LINK":
+      state.activeLink = action?.activeLink;
       return;
     default:
       return initialState;

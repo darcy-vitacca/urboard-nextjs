@@ -5,11 +5,12 @@ import {
   useFolderDispatch,
   useFolderState,
 } from "../../context/folder-context";
-import { handleLinkOrder } from "../fitlerOrder";
 import isEqual from "lodash/isEqual";
 import { useQueryClient } from "react-query";
 import { trpc } from "../trpc";
 import { filterSearchLinks } from "../filterSearch";
+import { Folder } from "../../types/folder";
+import { useGetMyFolders } from "./useGetMyFolders";
 
 interface IUseLinkProps {
   id: string;
@@ -18,7 +19,10 @@ export const useLinks = ({ id }: IUseLinkProps) => {
   const router = useRouter();
   const queryClient = useQueryClient();
   const folderDispatch = useFolderDispatch();
-  const { reorder, reorderItems } = useFolderState();
+  const { reorder, reorderItems } = useFolderState() as {
+    reorder: boolean;
+    reorderItems: Folder[];
+  };
   const [searchTerm, setSearchTerm] = useState("");
 
   const { mutate, isLoading: isUpdateLinksLoading } = trpc.useMutation(
@@ -29,18 +33,10 @@ export const useLinks = ({ id }: IUseLinkProps) => {
     }
   );
 
-  const { data, isLoading: isFoldersLoading } = trpc.useQuery(
-    ["protected.get-my-folders"],
-    {
-      refetchOnReconnect: false,
-      refetchOnMount: false,
-      refetchOnWindowFocus: false,
-      enabled: !reorder && !isUpdateLinksLoading,
-      onSuccess(data) {
-        folderDispatch({ type: "SET_FOLDERS", reorderItems: data });
-      },
-    }
-  );
+  const { data, isFoldersLoading } = useGetMyFolders({
+    reorder,
+    isLoading: isUpdateLinksLoading,
+  });
 
   const currentIndex =
     reorderItems?.findIndex((folder) => folder?.id === id) ?? -1;
@@ -72,11 +68,6 @@ export const useLinks = ({ id }: IUseLinkProps) => {
       ? filterSearchLinks({ data: folder?.links, searchTerm })
       : folder?.links;
 
-  const sortedLinks = handleLinkOrder({
-    data: folder?.links,
-    order: folder?.linkOrders?.order ?? [],
-  });
-
   const submitReorder = () => {
     if (!isEqual(reorderItems, data)) {
       if (reorderItems) {
@@ -90,7 +81,6 @@ export const useLinks = ({ id }: IUseLinkProps) => {
 
   return {
     folder,
-    sortedLinks,
     nextFolder,
     previousFolder,
     singleFolder,

@@ -12,9 +12,10 @@ import {
   createLinkValidator,
 } from "../validators/create-link-validator";
 import { Folder } from "../types/folder";
+import { useGetMyFolders } from "../utils/hooks/useGetMyFolders";
+import { useCreateLink } from "../utils/hooks/useCreateLink";
 
 const AddLink: NextPage = (props) => {
-  const router = useRouter();
 
   const {
     handleSubmit,
@@ -32,26 +33,18 @@ const AddLink: NextPage = (props) => {
     resolver: zodResolver(createLinkValidator),
   });
 
-  const { mutate, isLoading } = trpc.useMutation("protected.create-link", {
-    onSuccess: (data) => {
-      reset();
-      router.push(`/folder/${data?.id}`);
-    },
-  });
-
-  const { data: folderData, isLoading: isFoldersLoading } = trpc.useQuery(
-    ["protected.get-my-folders"],
-    {
-      refetchOnReconnect: false,
-      refetchOnMount: false,
-      refetchOnWindowFocus: false,
-      enabled: !isLoading,
-    }
-  );
-
+  const { data: folderData, isFoldersLoading } = useGetMyFolders({});
   const onSubmit: SubmitHandler<CreateLinkInputType> = (data) => {
     mutate(data);
+    reset();
   };
+
+  const selectedFolder = folderData?.length
+    ? folderData?.find((folder: Folder) => folder?.id === watch("folderId"))
+    : null;
+
+  const { mutate, isLoading } = useCreateLink();
+
   if (isLoading || isFoldersLoading) {
     return <Spinner absolute />;
   }
@@ -59,16 +52,11 @@ const AddLink: NextPage = (props) => {
     return <p>Something went wrong</p>;
   }
 
-  debugger;
   const folderOptions =
     folderData?.map((folder) => ({
       label: folder.name,
       value: folder.id,
     })) ?? [];
-
-  const selectedFolder = folderData?.length
-    ? folderData?.find((folder: Folder) => folder?.id === watch("folderId"))
-    : null;
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>

@@ -1,16 +1,16 @@
 import { useDraggable } from "@dnd-kit/core";
 import { useRouter } from "next/router";
 import { FC } from "react";
-import { Folder } from "../../types/folder";
+import { Link } from "../../types/link";
 
-interface IFolderDnd {
-  folder: Folder;
+interface ILinkDnd {
+  link: Link;
   children: React.ReactNode | React.ReactNode[];
 }
-export const FolderDnD: FC<IFolderDnd> = ({ folder, children }) => {
+export const LinkDnD: FC<ILinkDnd> = ({ link, children }) => {
   const { attributes, listeners, setNodeRef, isDragging } = useDraggable({
-    id: folder.id,
-    data: { ...folder, type: "FOLDER" },
+    id: link.id,
+    data: { ...link, type: "LINK" },
   });
 
   const router = useRouter();
@@ -22,8 +22,8 @@ export const FolderDnD: FC<IFolderDnd> = ({ folder, children }) => {
         {...attributes}
         {...listeners}
         onClick={() => {
-          if (isDragging) return;
-          router.push(`/folder/${folder?.id}`);
+          //   if (isDragging) return;
+          //   router.push(`/folder/${folder?.id}`);
         }}
       >
         {children}

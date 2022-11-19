@@ -30,7 +30,6 @@ const FolderSection: FC = () => {
     <div className="mx-3 flex w-full flex-col md:mx-4">
       <div className="flex flex-wrap justify-center gap-5 ">
         <div className="mx-auto flex w-full flex-col items-center">
-          {/* <UserInfo session={session} /> */}
           <SearchBar
             disabled={reorder}
             searchTerm={searchTerm}

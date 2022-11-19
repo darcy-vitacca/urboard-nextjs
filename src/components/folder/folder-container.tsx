@@ -31,7 +31,7 @@ type SortableProps = {
   reorderItems: Folder[] | Link[] | undefined;
   dispatch: Dispatch<FolderAction>;
   dispatchAction: "SET_UPDATED_FOLDER_ORDER" | "SET_UPDATED_LINKS_ORDER";
-  folder?: boolean;
+  folder: boolean;
 };
 
 type SortableItem = {
@@ -40,7 +40,6 @@ type SortableItem = {
 };
 const SortableItem: FC<SortableItem> = ({ data, folder }) => {
   const { attributes, listeners, setNodeRef } = useSortable({ id: data?.id });
-
   if (folder && data?.name && data?.id) {
     return (
       <div ref={setNodeRef} {...attributes} {...listeners}>
@@ -53,15 +52,17 @@ const SortableItem: FC<SortableItem> = ({ data, folder }) => {
       </div>
     );
   } else if (data?.name && data?.id && "url" in data) {
-    <div ref={setNodeRef} {...attributes} {...listeners}>
-      <LinkCard
-        key={data?.id}
-        name={data?.name}
-        url={data?.url}
-        linkId={data?.id}
-        disabled={true}
-      />
-    </div>;
+    return (
+      <div ref={setNodeRef} {...attributes} {...listeners}>
+        <LinkCard
+          key={data?.id}
+          name={data?.name}
+          url={data?.url}
+          linkId={data?.id}
+          disabled={true}
+        />
+      </div>
+    );
   }
   return <></>;
 };
@@ -72,6 +73,12 @@ const SortableContainer: FC<SortableProps> = ({
   dispatchAction,
   folder,
 }) => {
+  console.log({
+    reorderItems,
+    dispatch,
+    dispatchAction,
+    folder,
+  });
   const [activeId, setActiveId] = useState<string | null | UniqueIdentifier>(
     null
   );

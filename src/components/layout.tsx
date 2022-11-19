@@ -13,6 +13,7 @@ import { Spinner } from "./spinner/spinner";
 import { useSensor, useSensors } from "@dnd-kit/core";
 import { useQueryClient } from "react-query";
 import { Folder } from "../types/folder";
+import { Link } from "../types/link";
 
 type ILayout = { children: ReactNode };
 
@@ -20,39 +21,87 @@ const Layout: FC<ILayout> = ({ children }) => {
   const dispatchFolder = useFolderDispatch();
   const router = useRouter();
   const queryClient = useQueryClient();
-  const { activeFolder } = useFolderState();
+  const { activeFolder, activeLink } = useFolderState();
 
-  const { mutate, isLoading } = trpc.useMutation("protected.delete-folder", {
-    onSuccess: (data) => {
-      queryClient.setQueryData(["protected.get-my-folders"], data);
-      router.push("/");
-    },
-  });
+  const { mutate: mutateFolder, isLoading: foldersLoading } = trpc.useMutation(
+    "protected.delete-folder",
+    {
+      onSuccess: (data) => {
+        dispatchFolder({ type: "SET_FOLDERS", reorderItems: data });
+        queryClient.invalidateQueries("protected.get-my-folders");
+        router.push("/");
+      },
+    }
+  );
+  const { mutate: mutateLink, isLoading: linksLoading } = trpc.useMutation(
+    "protected.delete-link",
+    {
+      onSuccess: (data) => {
+        dispatchFolder({ type: "SET_FOLDERS", reorderItems: data });
+        queryClient.invalidateQueries("protected.get-my-folders");
+      },
+    }
+  );
+
+  const isLoading = foldersLoading || linksLoading;
 
   function handleDragEnd(event: DragEndEvent) {
     const { over } = event;
     if (over?.id === "edit") {
-      dispatchFolder({
-        type: "SET_ACTIVE_FOLDER",
-        activeFolder: undefined,
-      });
-      router.push(`/edit-folder/${activeFolder?.id}`);
+      if (event?.active?.data?.current) {
+        if (event?.active?.data?.current.type === "FOLDER") {
+          dispatchFolder({
+            type: "SET_ACTIVE_FOLDER",
+            activeFolder: undefined,
+          });
+          router.push(`/edit-folder/${activeFolder?.id}`);
+        }
+        if (event?.active?.data?.current.type === "LINK") {
+          dispatchFolder({
+            type: "SET_ACTIVE_LINK",
+            activeLink: undefined,
+          });
+          router.push(`/edit-link/${activeLink?.id}`);
+        }
+      }
     }
-    if (over?.id === "delete" && activeFolder?.id) {
-      mutate(activeFolder?.id);
+    if (over?.id === "delete") {
+      if (event?.active?.data?.current) {
+        if (
+          event?.active?.data?.current.type === "FOLDER" &&
+          activeFolder?.id
+        ) {
+          mutateFolder(activeFolder?.id);
+          dispatchFolder({
+            type: "SET_ACTIVE_FOLDER",
+            activeFolder: undefined,
+          });
+        }
+        if (event?.active?.data?.current.type === "LINK" && activeLink?.id) {
+          mutateLink(activeLink?.id);
+          dispatchFolder({
+            type: "SET_ACTIVE_LINK",
+            activeLink: undefined,
+          });
+        }
+      }
     }
-    dispatchFolder({
-      type: "SET_ACTIVE_FOLDER",
-      activeFolder: undefined,
-    });
   }
 
   function handleDragStart(event: DragStartEvent) {
     if (event?.active?.data?.current) {
-      dispatchFolder({
-        type: "SET_ACTIVE_FOLDER",
-        activeFolder: event.active.data.current as Folder,
-      });
+      if (event?.active?.data?.current.type === "FOLDER") {
+        dispatchFolder({
+          type: "SET_ACTIVE_FOLDER",
+          activeFolder: event.active.data.current as Folder,
+        });
+      }
+      if (event?.active?.data?.current.type === "LINK") {
+        dispatchFolder({
+          type: "SET_ACTIVE_LINK",
+          activeLink: event.active.data.current as Link,
+        });
+      }
     }
   }
 

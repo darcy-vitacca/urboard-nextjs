@@ -7,6 +7,8 @@ import { useLinks } from "../../utils/hooks/useLinks";
 import { LinkCard } from "./link";
 import SortableContainer from "../folder/folder-container";
 import { Link } from "../../types/link";
+import { LinkDnD } from "./link-dnd-hoc";
+import { DragOverlay } from "@dnd-kit/core";
 
 interface ILinkSection {
   id: string;
@@ -27,7 +29,7 @@ const LinkSection: FC<ILinkSection> = ({ id }) => {
     submitReorder,
   } = useLinks({ id });
 
-  const { reorder } = useFolderState();
+  const { reorder, activeLink } = useFolderState();
 
   if (isFoldersLoading) {
     return <Spinner absolute />;
@@ -81,29 +83,32 @@ const LinkSection: FC<ILinkSection> = ({ id }) => {
               reorderItems={folder?.links}
               dispatch={folderDispatch}
               dispatchAction="SET_UPDATED_LINKS_ORDER"
+              folder={false}
             />
           ) : (
             <>
               {filteredSearchData?.map((link: Link) => {
                 return (
-                  <LinkCard
-                    key={link?.id}
-                    name={link?.name}
-                    url={link?.url}
-                    linkId={link?.id}
-                    disabled={reorder}
-                  />
+                  <LinkDnD link={link} key={link?.id}>
+                    <LinkCard
+                      name={link?.name}
+                      url={link?.url}
+                      linkId={link?.id}
+                      disabled={reorder}
+                    />
+                  </LinkDnD>
                 );
               })}
-              {/* <DragOverlay>
-            {activeFolder ? (
-              <FolderCard
-                name={activeFolder?.name}
-                folderId={activeFolder?.id}
-                disabled={true}
-              />
-            ) : null}
-          </DragOverlay> */}
+              <DragOverlay>
+                {activeLink ? (
+                  <LinkCard
+                    name={activeLink?.name}
+                    url={activeLink?.url}
+                    linkId={activeLink?.id}
+                    disabled={reorder}
+                  />
+                ) : null}
+              </DragOverlay>
             </>
           )
         ) : (

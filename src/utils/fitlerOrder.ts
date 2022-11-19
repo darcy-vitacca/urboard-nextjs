@@ -4,7 +4,7 @@ import { Link } from "../types/link";
 
 export const handleFolderOrder = ({ foldersData = [], order }: {
     foldersData: Folder[] | undefined, order: string[] | undefined
-}): unknown => {
+}): Folder[] => {
     if (order?.length && foldersData.length) {
         foldersData?.sort((a, b) => order?.indexOf(a.id) - order?.indexOf(b.id));
     }
@@ -18,14 +18,15 @@ export const handleFolderOrder = ({ foldersData = [], order }: {
             return folder;
         }
     });
-    return data;
+    return data as Folder[];
 }
 
 export const handleLinkOrder = ({ data = [], order }: {
     data: Link[] | undefined, order: string[] | undefined
 }): Link[] | undefined => {
-    if (order?.length && data?.length) {
-        data?.sort((a, b) => order?.indexOf(a.id) - order?.indexOf(b.id));
+    if (data && order && order?.length && data?.length) {
+
+        data?.sort((a, b) => order?.indexOf(a?.id) - order?.indexOf(b?.id));
     }
     return data
 }

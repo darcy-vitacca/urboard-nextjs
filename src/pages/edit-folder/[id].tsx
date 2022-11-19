@@ -2,25 +2,33 @@ import { useRouter } from "next/router";
 import { NextPage } from "next";
 import { Input } from "../../components/input/input";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { trpc } from "../../utils/trpc";
 import { Spinner } from "../../components/spinner/spinner";
 import { UpdateFolderInputType } from "../../validators/update-folder-validator";
-import { useQueryClient } from "react-query";
+import { useGetFolderById } from "../../utils/hooks/useGetFolderById";
+import { useUpdateFolder } from "../../utils/hooks/useUpdateFolder";
+import { Folder } from "../../types/folder";
 
 const FolderPage: NextPage = (props) => {
   const router = useRouter();
-  const queryClient = useQueryClient();
   const { id } = router.query as { id: string };
 
   if (!id || typeof id != "string") {
     router.push("/");
   }
 
-  const { data, isLoading, isFetching } = trpc.useQuery([
-    "protected.get-folder-by-id",
-    id,
-  ]);
+  const { data, isLoading, isFetching } = useGetFolderById({ id });
 
+  if (isLoading || isFetching) {
+    return <Spinner absolute />;
+  }
+
+  if (data) {
+    return <FolderForm data={data} id={id} />;
+  }
+  return <></>;
+};
+
+const FolderForm = ({ data, id }: { data: Folder; id: string }) => {
   const {
     handleSubmit,
     formState: { errors },
@@ -32,26 +40,13 @@ const FolderPage: NextPage = (props) => {
     },
   });
 
-  const { mutate, isLoading: updateLoading } = trpc.useMutation(
-    "protected.update-folder",
-    {
-      onSuccess: async () => {
-        await queryClient.refetchQueries(["protected.get-my-folders"], {
-          active: false,
-          exact: true,
-          inactive: true,
-        });
-
-        router.push(`/`);
-      },
-    }
-  );
+  const { mutate, updateLoading } = useUpdateFolder();
 
   const onSubmit: SubmitHandler<UpdateFolderInputType> = (formData) => {
     mutate({ ...formData, id });
   };
 
-  if (isLoading || isFetching || updateLoading) {
+  if (updateLoading) {
     return <Spinner absolute />;
   }
 

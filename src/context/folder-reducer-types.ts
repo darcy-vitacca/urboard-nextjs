@@ -32,6 +32,11 @@ export type FolderAction =
         type: "SET_ACTIVE_FOLDER";
         activeFolder: Folder | undefined;
     }
+    |
+    {
+        type: "SET_ACTIVE_LINK";
+        activeLink: Link | undefined;
+    }
 
 
 
@@ -41,5 +46,6 @@ export type State = {
     reorderItems: Folder[] | Link[] | undefined;
     edit: boolean;
     activeFolder: Folder | undefined;
+    activeLink: Link | undefined;
 };
 
