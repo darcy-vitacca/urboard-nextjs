@@ -3,12 +3,12 @@ import SearchBar from "../search/search";
 import { Spinner } from "../spinner/spinner";
 import { ActionBar } from "../action-bar/action-bar";
 import { useFolderState } from "../../context/folder-context";
-import { useLinks } from "../../utils/hooks/useLinks";
 import { LinkCard } from "./link";
 import SortableContainer from "../folder/folder-container";
 import { Link } from "../../types/link";
 import { LinkDnD } from "./link-dnd-hoc";
 import { DragOverlay } from "@dnd-kit/core";
+import { useLinks } from "../../utils/hooks";
 
 interface ILinkSection {
   id: string;
@@ -31,8 +31,6 @@ const LinkSection: FC<ILinkSection> = ({ id }) => {
   } = useLinks({ id });
 
   const { reorder, activeLink } = useFolderState();
-
-  console.log("isFoldersLoading", isFoldersLoading);
 
   if (isFoldersLoading || isFoldersFetching) {
     return <Spinner absolute />;

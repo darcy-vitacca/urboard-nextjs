@@ -43,6 +43,8 @@ export const useFolder = (): UseFolder => {
     if (!isEqual(reorderItems, data)) {
       if (reorderItems) {
         queryClient.setQueryData(["protected.get-my-folders"], reorderItems);
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
         mutate(reorderItems);
       }
     } else {

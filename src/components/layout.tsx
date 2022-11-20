@@ -8,44 +8,20 @@ import {
   PointerSensor,
 } from "@dnd-kit/core";
 import { useFolderDispatch, useFolderState } from "../context/folder-context";
-import { trpc } from "../utils/trpc";
 import { Spinner } from "./spinner/spinner";
 import { useSensor, useSensors } from "@dnd-kit/core";
-import { useQueryClient } from "react-query";
 import { Folder } from "../types/folder";
 import { Link } from "../types/link";
+import { useDeleteFolder, useDeleteLink } from "../utils/hooks";
 
 type ILayout = { children: ReactNode };
 
 const Layout: FC<ILayout> = ({ children }) => {
   const dispatchFolder = useFolderDispatch();
   const router = useRouter();
-  const queryClient = useQueryClient();
   const { activeFolder, activeLink } = useFolderState();
-
-  const { mutate: mutateFolder, isLoading: foldersLoading } = trpc.useMutation(
-    "protected.delete-folder",
-    {
-      onSuccess: (data) => {
-        dispatchFolder({ type: "SET_FOLDERS", reorderItems: data });
-        queryClient.invalidateQueries({
-          queryKey: ["protected.get-my-folders"],
-        }),
-          router.push("/");
-      },
-    }
-  );
-  const { mutate: mutateLink, isLoading: linksLoading } = trpc.useMutation(
-    "protected.delete-link",
-    {
-      onSuccess: (data) => {
-        dispatchFolder({ type: "SET_FOLDERS", reorderItems: data });
-        queryClient.invalidateQueries({
-          queryKey: ["protected.get-my-folders"],
-        });
-      },
-    }
-  );
+  const { mutateFolder, foldersLoading } = useDeleteFolder();
+  const { mutateLink, linksLoading } = useDeleteLink();
 
   const isLoading = foldersLoading || linksLoading;
 

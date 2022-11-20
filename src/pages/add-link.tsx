@@ -1,22 +1,17 @@
-import { FC } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { NextPage } from "next";
-import { useRouter } from "next/router";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { Input } from "../components/input/input";
 import { Select } from "../components/select/select";
 import { Spinner } from "../components/spinner/spinner";
-import { trpc } from "../utils/trpc";
 import {
   CreateLinkInputType,
   createLinkValidator,
 } from "../validators/create-link-validator";
 import { Folder } from "../types/folder";
-import { useGetMyFolders } from "../utils/hooks/useGetMyFolders";
-import { useCreateLink } from "../utils/hooks/useCreateLink";
+import { useCreateLink, useGetMyFolders } from "../utils/hooks";
 
 const AddLink: NextPage = (props) => {
-
   const {
     handleSubmit,
     formState: { errors },

@@ -1,9 +1,10 @@
 import { Dispatch, FC } from "react";
+import { FolderAction } from "../../context/folder-reducer-types";
 import { ReorderBtn } from "./reorder-btn";
 
 export interface IAction {
   reorder: boolean;
-  dispatch: Dispatch<any>;
+  dispatch: Dispatch<FolderAction>;
   submitReorder: () => void;
   disabled: boolean;
   isUpdating: boolean;

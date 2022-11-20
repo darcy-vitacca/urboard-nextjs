@@ -164,7 +164,8 @@ export const protectedRouter = createProtectedRouter()
           order: foldersOrder,
         },
       })
-      //@ts-ignore
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
       const folders = handleFolderOrder({ foldersData: input, order: foldersOrder })
       return folders
     },

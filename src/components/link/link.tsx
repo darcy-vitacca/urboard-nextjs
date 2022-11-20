@@ -8,7 +8,7 @@ type ILinkCard = {
   url: string;
   disabled: boolean;
 };
-export const LinkCard: FC<ILinkCard> = ({ name, linkId, url, disabled }) => {
+export const LinkCard: FC<ILinkCard> = ({ name, url, disabled }) => {
   return (
     <LinkWrapper href={url} disabled={disabled}>
       <a target="_blank" rel="noopener noreferrer">

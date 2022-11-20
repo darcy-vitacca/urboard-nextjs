@@ -23,6 +23,7 @@ export const folderReducer = (state: State, action: FolderAction) => {
         ) ?? -1;
 
       if (index !== -1 && state.reorderItems) {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
         state.reorderItems[index].links = action?.reorderItems;
       }
@@ -57,7 +58,8 @@ export const folderReducer = (state: State, action: FolderAction) => {
 };
 const StateContext = createContext<State>(initialState);
 
-//@ts-ignore
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
 const DispatchContext = createContext<Dispatch<FolderAction>>();
 
 export const FolderProvider = ({ children }: { children: React.ReactNode }) => {

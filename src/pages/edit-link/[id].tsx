@@ -1,5 +1,9 @@
 import { useRouter } from "next/router";
-import { NextPage } from "next";
+import {
+  GetServerSideProps,
+  NextPage,
+  InferGetServerSidePropsType,
+} from "next";
 import { Input } from "../../components/input/input";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { Spinner } from "../../components/spinner/spinner";
@@ -8,19 +12,18 @@ import {
   createLinkValidator,
 } from "../../validators/create-link-validator";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useGetMyFolders } from "../../utils/hooks/useGetMyFolders";
-import { useUpdateLink } from "../../utils/hooks/useUpdateLink";
-import { useGetLinkById } from "../../utils/hooks/useGetLinkById";
 import { Link } from "../../types/link";
+import {
+  useGetLinkById,
+  useGetMyFolders,
+  useUpdateLink,
+} from "../../utils/hooks";
 
-const LinkPage: NextPage = (props) => {
+const LinkPage: NextPage = (
+  props: InferGetServerSidePropsType<typeof getServerSideProps>
+) => {
   const router = useRouter();
   const { id } = router.query as { id: string };
-
-  if (!id || typeof id != "string") {
-    router.push("/");
-  }
-
   const { data, isLoading, isFetching } = useGetLinkById({ id });
   const loading = isLoading || isFetching;
 
@@ -80,3 +83,15 @@ const LinkForm = ({ data, id }: { data: Link; id: string }) => {
 };
 
 export default LinkPage;
+
+export const getServerSideProps: GetServerSideProps = async ({ query }) => {
+  if (!query.id) {
+    return {
+      notFound: true,
+    };
+  }
+
+  return {
+    props: {},
+  };
+};

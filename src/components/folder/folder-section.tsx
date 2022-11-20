@@ -2,12 +2,12 @@ import { FC } from "react";
 import SearchBar from "../search/search";
 import { FolderCard } from "./folder";
 import SortableContainer from "./folder-container";
-import { useFolder } from "../../utils/hooks/useFolder";
 import { Spinner } from "../spinner/spinner";
 import { ActionBar } from "../action-bar/action-bar";
 import { useFolderState } from "../../context/folder-context";
 import { FolderDnD } from "./folder-dnd-hoc";
 import { DragOverlay } from "@dnd-kit/core";
+import { useFolder } from "../../utils/hooks";
 
 const FolderSection: FC = () => {
   const {

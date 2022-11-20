@@ -1,8 +1,8 @@
 import { useRouter } from "next/router";
-import { useFolder } from "../../utils/hooks/useFolder";
 import { NextPage } from "next";
 import LinkSection from "../../components/link/link-section";
 import { Spinner } from "../../components/spinner/spinner";
+import { useFolder } from "../../utils/hooks";
 
 const FolderPage: NextPage = (props) => {
   const router = useRouter();

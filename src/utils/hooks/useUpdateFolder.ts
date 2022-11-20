@@ -10,7 +10,6 @@ export const useUpdateFolder = () => {
         {
             onSuccess: async () => {
                 await queryClient.refetchQueries(["protected.get-my-folders"]);
-
                 router.push(`/`);
             },
         }

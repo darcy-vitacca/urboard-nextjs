@@ -1,7 +1,7 @@
 import { ChangeEvent, Dispatch, FC, SetStateAction } from "react";
 import { Folder } from "../../types/folder";
 import { Link } from "../../types/link";
-import { useSearchShortcut } from "../../utils/hooks/useSearchShortcut";
+import { useSearchShortcut } from "../../utils/hooks";
 
 type SearchBarProps = {
   searchTerm: string;

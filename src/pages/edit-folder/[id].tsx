@@ -1,21 +1,21 @@
 import { useRouter } from "next/router";
-import { NextPage } from "next";
+import {
+  GetServerSideProps,
+  NextPage,
+  InferGetServerSidePropsType,
+} from "next";
 import { Input } from "../../components/input/input";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { Spinner } from "../../components/spinner/spinner";
 import { UpdateFolderInputType } from "../../validators/update-folder-validator";
-import { useGetFolderById } from "../../utils/hooks/useGetFolderById";
-import { useUpdateFolder } from "../../utils/hooks/useUpdateFolder";
 import { Folder } from "../../types/folder";
+import { useGetFolderById, useUpdateFolder } from "../../utils/hooks";
 
-const FolderPage: NextPage = (props) => {
+const FolderPage: NextPage = (
+  props: InferGetServerSidePropsType<typeof getServerSideProps>
+) => {
   const router = useRouter();
   const { id } = router.query as { id: string };
-
-  if (!id || typeof id != "string") {
-    router.push("/");
-  }
-
   const { data, isLoading, isFetching } = useGetFolderById({ id });
   const loading = isLoading || isFetching;
 
@@ -24,6 +24,8 @@ const FolderPage: NextPage = (props) => {
   }
 
   if (data) {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     return <FolderForm data={data} id={id} />;
   }
   return <></>;
@@ -68,3 +70,15 @@ const FolderForm = ({ data, id }: { data: Folder; id: string }) => {
 };
 
 export default FolderPage;
+
+export const getServerSideProps: GetServerSideProps = async ({ query }) => {
+  if (!query.id) {
+    return {
+      notFound: true,
+    };
+  }
+
+  return {
+    props: {},
+  };
+};
