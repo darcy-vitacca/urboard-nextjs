@@ -8,6 +8,7 @@ export type INavItem = {
     toolTip: string;
     Icon: (props: React.ComponentProps<'svg'>) => JSX.Element
     href?: string;
+    onClick?: () => void;
 };
 
 

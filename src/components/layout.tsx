@@ -13,6 +13,8 @@ import { useSensor, useSensors } from "@dnd-kit/core";
 import { Folder } from "../types/folder";
 import { Link } from "../types/link";
 import { useDeleteFolder, useDeleteLink } from "../utils/hooks";
+import clsx from "clsx";
+import { useSession } from "next-auth/react";
 
 type ILayout = { children: ReactNode };
 
@@ -92,6 +94,7 @@ const Layout: FC<ILayout> = ({ children }) => {
       },
     })
   );
+  const { data: session } = useSession();
 
   return (
     <DndContext
@@ -101,7 +104,11 @@ const Layout: FC<ILayout> = ({ children }) => {
     >
       <div className="flex min-h-screen w-full min-w-[320px] flex-row bg-gray-50">
         <Sidebar />
-        <div className="mt-10  ml-20 flex w-full items-start justify-center">
+        <div
+          className={clsx(`mt-10 flex w-full items-start justify-center`, {
+            ["ml-20"]: session?.user,
+          })}
+        >
           {isLoading ? <Spinner absolute /> : children}
         </div>
       </div>

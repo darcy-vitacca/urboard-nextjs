@@ -1,10 +1,11 @@
 import type { NextPage } from "next";
-import { useSession, signIn } from "next-auth/react";
+import { useSession } from "next-auth/react";
 import Head from "next/head";
 import { AuthStatus } from "../types/custom-next-auth";
 
 import { Spinner } from "../components/spinner/spinner";
 import FolderSection from "../components/folder/folder-section";
+import { Landing } from "../components/landing/landing";
 
 const Home: NextPage = (props) => {
   const { data: session, status } = useSession();
@@ -19,16 +20,7 @@ const Home: NextPage = (props) => {
         <title>urboard</title>
         <meta name="description" content="urboard" />
       </Head>
-      {session?.user ? (
-        <FolderSection />
-      ) : (
-        <>
-          Not signed in <br />
-          <button className="btn" onClick={() => signIn()}>
-            Sign in
-          </button>
-        </>
-      )}
+      {session?.user ? <FolderSection /> : <Landing />}
     </>
   );
 };

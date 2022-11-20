@@ -11,7 +11,6 @@ export const initialState = {
 };
 
 export const folderReducer = (state: State, action: FolderAction) => {
-  console.log("action.type", action.type);
   switch (action.type) {
     case "SET_UPDATED_FOLDER_ORDER":
       state.reorderItems = action?.reorderItems;
