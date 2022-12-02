@@ -18,6 +18,7 @@ export const FolderDnD: FC<IFolderDnd> = ({ folder, children }) => {
   return (
     <>
       <div
+        className="touch-none"
         ref={setNodeRef}
         {...attributes}
         {...listeners}
