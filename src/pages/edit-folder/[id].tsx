@@ -54,18 +54,20 @@ const FolderForm = ({ data, id }: { data: Folder; id: string }) => {
   }
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <h1 className="prose-xl font-bold">Editing Folder: {data?.name} </h1>
-      <Input
-        label="Folder Name"
-        error={errors?.name?.message}
-        {...register("name")}
-      />
+    <div className="mx-4 w-full max-w-lg">
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <h1 className="prose-xl font-bold">Editing Folder: {data?.name} </h1>
+        <Input
+          label="Folder Name"
+          error={errors?.name?.message}
+          {...register("name")}
+        />
 
-      <button className="btn mt-4" type="submit">
-        Submit
-      </button>
-    </form>
+        <button className="btn mt-4" type="submit">
+          Submit
+        </button>
+      </form>
+    </div>
   );
 };
 

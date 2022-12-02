@@ -66,19 +66,21 @@ const LinkForm = ({ data, id }: { data: Link; id: string }) => {
   }
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <h1 className="prose-xl font-bold">Editing Link: {data?.name} </h1>
-      <Input
-        label="Link Name"
-        error={errors?.name?.message}
-        {...register("name")}
-      />
-      <Input label="URL" error={errors?.url?.message} {...register("url")} />
+    <div className="mx-4 w-full max-w-lg">
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <h1 className="prose-xl font-bold">Editing Link: {data?.name} </h1>
+        <Input
+          label="Link Name"
+          error={errors?.name?.message}
+          {...register("name")}
+        />
+        <Input label="URL" error={errors?.url?.message} {...register("url")} />
 
-      <button className="btn mt-4" type="submit">
-        Submit
-      </button>
-    </form>
+        <button className="btn mt-4" type="submit">
+          Submit
+        </button>
+      </form>
+    </div>
   );
 };
 

@@ -105,7 +105,7 @@ const Layout: FC<ILayout> = ({ children }) => {
       <div className="flex min-h-screen w-full min-w-[320px] flex-row bg-gray-50">
         <Sidebar />
         <div
-          className={clsx(`mt-10 flex w-full items-start justify-center`, {
+          className={clsx(`mt-10 flex w-full  items-start justify-center`, {
             ["ml-20"]: session?.user,
           })}
         >
