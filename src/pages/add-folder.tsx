@@ -42,7 +42,7 @@ const AddFolder: FC<NextPage> = (props) => {
   }
 
   return (
-    <div className="max-w-lg">
+    <div className="mx-4 w-full max-w-md">
       <form onSubmit={handleSubmit(onSubmit)}>
         <h1 className="prose-xl font-bold">Add Folder</h1>
         <Input

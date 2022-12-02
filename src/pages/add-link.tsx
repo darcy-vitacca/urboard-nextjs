@@ -54,7 +54,7 @@ const AddLink: NextPage = (props) => {
     })) ?? [];
 
   return (
-    <div className="mx-4 w-full max-w-lg">
+    <div className="mx-4 w-full max-w-md">
       <form onSubmit={handleSubmit(onSubmit)}>
         <h1 className="prose-xl font-bold">
           Add Link {selectedFolder ? `to ${selectedFolder?.name}` : ""}
