@@ -12,7 +12,7 @@ import { Input } from "../components/input/input";
 import { Spinner } from "../components/spinner/spinner";
 import { FC } from "react";
 
-const AddFolder: FC<NextPage> = () => {
+const AddFolder: FC<NextPage> = (props) => {
   const router = useRouter();
   const {
     handleSubmit,
@@ -42,18 +42,20 @@ const AddFolder: FC<NextPage> = () => {
   }
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <h1 className="prose-xl font-bold">Add Folder</h1>
-      <Input
-        label="Folder Name"
-        error={errors?.name?.message}
-        {...register("name")}
-      />
+    <div className="max-w-lg">
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <h1 className="prose-xl font-bold">Add Folder</h1>
+        <Input
+          label="Folder Name"
+          error={errors?.name?.message}
+          {...register("name")}
+        />
 
-      <button className="btn mt-4" type="submit">
-        Submit
-      </button>
-    </form>
+        <button className="btn mt-4" type="submit">
+          Submit
+        </button>
+      </form>
+    </div>
   );
 };
 export default AddFolder;
