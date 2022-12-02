@@ -41,13 +41,13 @@ export const navItems: INavItem[] = [
         href: "/add-link",
 
     },
-    {
-        id: 'settings',
-        toolTip: "Settings",
-        Icon: Cog8ToothIcon,
-        href: "/settings",
+    // {
+    //     id: 'settings',
+    //     toolTip: "Settings",
+    //     Icon: Cog8ToothIcon,
+    //     href: "/settings",
 
-    },
+    // },
     {
         id: 'delete',
         toolTip: "Drag item to Delete",
