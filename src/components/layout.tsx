@@ -1,4 +1,4 @@
-import React, { FC, ReactNode } from "react";
+import React, { FC, ReactNode, useEffect } from "react";
 import { useRouter } from "next/router";
 import Sidebar from "./side-bar/side-bar";
 import {
@@ -15,6 +15,7 @@ import { Link } from "../types/link";
 import { useDeleteFolder, useDeleteLink } from "../utils/hooks";
 import clsx from "clsx";
 import { useSession } from "next-auth/react";
+import * as gtag from "../utils/gtag";
 
 type ILayout = { children: ReactNode };
 
@@ -95,6 +96,17 @@ const Layout: FC<ILayout> = ({ children }) => {
     })
   );
   const { data: session } = useSession();
+
+  useEffect(() => {
+    const handleRouteChange = (url: URL) => {
+      /* invoke analytics function only for production */
+      gtag.pageview(url);
+    };
+    router.events.on("routeChangeComplete", handleRouteChange);
+    return () => {
+      router.events.off("routeChangeComplete", handleRouteChange);
+    };
+  }, [router.events]);
 
   return (
     <DndContext
