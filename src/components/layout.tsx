@@ -15,7 +15,7 @@ import { Link } from "../types/link";
 import { useDeleteFolder, useDeleteLink } from "../utils/hooks";
 import clsx from "clsx";
 import { useSession } from "next-auth/react";
-import * as gtag from "../utils/gtag";
+import ReactGA from "react-ga4";
 
 type ILayout = { children: ReactNode };
 
@@ -98,12 +98,13 @@ const Layout: FC<ILayout> = ({ children }) => {
   const { data: session } = useSession();
 
   useEffect(() => {
-    const handleRouteChange = (url: URL) => {
-      gtag.pageview(url);
-    };
-    router.events.on("routeChangeComplete", handleRouteChange);
+    router.events.on("routeChangeComplete", (url) => {
+      ReactGA.send(url);
+    });
     return () => {
-      router.events.off("routeChangeComplete", handleRouteChange);
+      router.events.off("routeChangeComplete", (url) => {
+        ReactGA.send(url);
+      });
     };
   }, [router.events]);
 

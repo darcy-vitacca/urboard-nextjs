@@ -12,46 +12,27 @@ import "../styles/globals.css";
 import Layout from "../components/layout";
 import { FolderProvider } from "../context/folder-context";
 import { ReactQueryDevtools } from "react-query/devtools";
-import Script from "next/script";
+import ReactGA from "react-ga4";
+
+ReactGA.initialize(
+  process?.env?.NEXT_PUBLIC_GOOGLE_ANALYTICS_MEASUREMENT_ID ?? ""
+);
 
 const MyApp: AppType<{ session: Session | null }> = ({
   Component,
   pageProps: { session, ...pageProps },
 }) => {
-
-  
   return (
-    <>
-      <Script
-        strategy="afterInteractive"
-        src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_MEASUREMENT_ID}`}
-      />
-
-      <Script
-        id="google-analytics"
-        strategy="afterInteractive"
-        dangerouslySetInnerHTML={{
-          __html: `
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-            gtag('config', '${process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_MEASUREMENT_ID}', {
-              page_path: window.location.pathname,
-            });
-          `,
-        }}
-      />
-      <SessionProvider session={session}>
-        <FolderProvider>
-          <Layout>
-            {process.env.NODE_ENV !== "production" && (
-              <ReactQueryDevtools initialIsOpen={false} />
-            )}
-            <Component {...pageProps} />
-          </Layout>
-        </FolderProvider>
-      </SessionProvider>
-    </>
+    <SessionProvider session={session}>
+      <FolderProvider>
+        <Layout>
+          {process.env.NODE_ENV !== "production" && (
+            <ReactQueryDevtools initialIsOpen={false} />
+          )}
+          <Component {...pageProps} />
+        </Layout>
+      </FolderProvider>
+    </SessionProvider>
   );
 };
 
