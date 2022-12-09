@@ -99,11 +99,11 @@ const Layout: FC<ILayout> = ({ children }) => {
 
   useEffect(() => {
     router.events.on("routeChangeComplete", (url) => {
-      ReactGA.send(url);
+      ReactGA.send({ hitType: "pageview", page: url });
     });
     return () => {
       router.events.off("routeChangeComplete", (url) => {
-        ReactGA.send(url);
+        ReactGA.send({ hitType: "pageview", page: url });
       });
     };
   }, [router.events]);
