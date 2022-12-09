@@ -99,7 +99,6 @@ const Layout: FC<ILayout> = ({ children }) => {
 
   useEffect(() => {
     const handleRouteChange = (url: URL) => {
-      /* invoke analytics function only for production */
       gtag.pageview(url);
     };
     router.events.on("routeChangeComplete", handleRouteChange);
