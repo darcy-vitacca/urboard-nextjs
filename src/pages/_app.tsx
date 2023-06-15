@@ -15,9 +15,9 @@ import { ReactQueryDevtools } from "react-query/devtools";
 import ReactGA from "react-ga4";
 import Script from "next/script";
 
-ReactGA.initialize(
-  process?.env?.NEXT_PUBLIC_GOOGLE_ANALYTICS_MEASUREMENT_ID ?? ""
-);
+// ReactGA.initialize(
+//   process?.env?.NEXT_PUBLIC_GOOGLE_ANALYTICS_MEASUREMENT_ID ?? ""
+// );
 
 const MyApp: AppType<{ session: Session | null }> = ({
   Component,
