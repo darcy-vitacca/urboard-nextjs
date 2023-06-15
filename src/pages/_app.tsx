@@ -12,6 +12,7 @@ import "../styles/globals.css";
 import Layout from "../components/layout";
 import { FolderProvider } from "../context/folder-context";
 import { ReactQueryDevtools } from "react-query/devtools";
+import Script from "next/script";
 
 const MyApp: AppType<{ session: Session | null }> = ({
   Component,
@@ -19,6 +20,13 @@ const MyApp: AppType<{ session: Session | null }> = ({
 }) => {
   return (
     <SessionProvider session={session}>
+      <Script
+        src="https://www.chatbotic.co/widget.min.js"
+        id="lCcIAiaxhAevojS68sC5t"
+        data-url="https://www.chatbotic.co"
+        defer
+      />
+
       <FolderProvider>
         <Layout>
           {process.env.NODE_ENV !== "production" && (
