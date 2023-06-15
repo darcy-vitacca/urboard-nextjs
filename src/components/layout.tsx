@@ -1,4 +1,4 @@
-import React, { FC, ReactNode } from "react";
+import React, { FC, ReactNode, useEffect } from "react";
 import { useRouter } from "next/router";
 import Sidebar from "./side-bar/side-bar";
 import {
@@ -15,6 +15,7 @@ import { Link } from "../types/link";
 import { useDeleteFolder, useDeleteLink } from "../utils/hooks";
 import clsx from "clsx";
 import { useSession } from "next-auth/react";
+import ReactGA from "react-ga4";
 
 type ILayout = { children: ReactNode };
 
@@ -96,6 +97,17 @@ const Layout: FC<ILayout> = ({ children }) => {
   );
   const { data: session } = useSession();
 
+  useEffect(() => {
+    router.events.on("routeChangeComplete", (url) => {
+      ReactGA.send({ hitType: "pageview", page: url });
+    });
+    return () => {
+      router.events.off("routeChangeComplete", (url) => {
+        ReactGA.send({ hitType: "pageview", page: url });
+      });
+    };
+  }, [router.events]);
+
   return (
     <DndContext
       sensors={sensors}
@@ -105,7 +117,7 @@ const Layout: FC<ILayout> = ({ children }) => {
       <div className="flex min-h-screen w-full min-w-[320px] flex-row bg-gray-50">
         <Sidebar />
         <div
-          className={clsx(`mt-10 flex w-full items-start justify-center`, {
+          className={clsx(`mt-10 flex w-full  items-start justify-center`, {
             ["ml-20"]: session?.user,
           })}
         >

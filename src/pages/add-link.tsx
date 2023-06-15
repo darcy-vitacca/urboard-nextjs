@@ -38,7 +38,7 @@ const AddLink: NextPage = (props) => {
     ? folderData?.find((folder: Folder) => folder?.id === watch("folderId"))
     : null;
 
-  const { mutate, isLoading } = useCreateLink();
+  const { mutate, isLoading } = useCreateLink({ folderId: selectedFolder?.id });
 
   if (isLoading || isFoldersLoading) {
     return <Spinner absolute />;
@@ -54,27 +54,29 @@ const AddLink: NextPage = (props) => {
     })) ?? [];
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <h1 className="prose-xl font-bold">
-        Add Link {selectedFolder ? `to ${selectedFolder?.name}` : ""}
-      </h1>
-      <Select
-        label="Select Folder"
-        error={errors?.folderId?.message}
-        {...register("folderId")}
-        options={folderOptions}
-      />
-      <Input
-        label="Link Name"
-        error={errors?.name?.message}
-        {...register("name")}
-      />
-      <Input label="URL" error={errors?.url?.message} {...register("url")} />
+    <div className="mx-4 w-full max-w-md">
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <h1 className="prose-xl font-bold">
+          Add Link {selectedFolder ? `to ${selectedFolder?.name}` : ""}
+        </h1>
+        <Select
+          label="Select Folder"
+          error={errors?.folderId?.message}
+          {...register("folderId")}
+          options={folderOptions}
+        />
+        <Input
+          label="Link Name"
+          error={errors?.name?.message}
+          {...register("name")}
+        />
+        <Input label="URL" error={errors?.url?.message} {...register("url")} />
 
-      <button className="btn mt-4" type="submit">
-        Submit
-      </button>
-    </form>
+        <button className="btn mt-4" type="submit">
+          Submit
+        </button>
+      </form>
+    </div>
   );
 };
 export default AddLink;

@@ -14,7 +14,12 @@ export const LinkDnD: FC<ILinkDnd> = ({ link, children }) => {
 
   return (
     <>
-      <div ref={setNodeRef} {...attributes} {...listeners}>
+      <div
+        className="touch-none"
+        ref={setNodeRef}
+        {...attributes}
+        {...listeners}
+      >
         {children}
       </div>
     </>

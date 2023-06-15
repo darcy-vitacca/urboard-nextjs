@@ -41,7 +41,7 @@ export const DroppableNavIcon: FC<INavItem> = ({ toolTip, Icon, id }) => {
     <li
       ref={setNodeRef}
       className={clsx(
-        "group group relative my-1 flex  justify-center rounded-xl p-2 text-white hover:bg-white",
+        "group group relative my-1 flex touch-none  justify-center rounded-xl p-2 text-white hover:bg-white",
         {
           ["bg-white text-slate-900"]: isOver,
         }

@@ -43,7 +43,12 @@ const SortableItem: FC<SortableItem> = ({ data, folder }) => {
   const { attributes, listeners, setNodeRef } = useSortable({ id: data?.id });
   if (folder && data?.name && data?.id) {
     return (
-      <div ref={setNodeRef} {...attributes} {...listeners}>
+      <div
+        className="touch-none"
+        ref={setNodeRef}
+        {...attributes}
+        {...listeners}
+      >
         <FolderCard
           key={data?.id}
           name={data?.name}
@@ -54,7 +59,12 @@ const SortableItem: FC<SortableItem> = ({ data, folder }) => {
     );
   } else if (data?.name && data?.id && "url" in data) {
     return (
-      <div ref={setNodeRef} {...attributes} {...listeners}>
+      <div
+        className="touch-none"
+        ref={setNodeRef}
+        {...attributes}
+        {...listeners}
+      >
         <LinkCard
           key={data?.id}
           name={data?.name}
@@ -74,12 +84,6 @@ const SortableContainer: FC<SortableProps> = ({
   dispatchAction,
   folder,
 }) => {
-  console.log({
-    reorderItems,
-    dispatch,
-    dispatchAction,
-    folder,
-  });
   const [activeId, setActiveId] = useState<string | null | UniqueIdentifier>(
     null
   );

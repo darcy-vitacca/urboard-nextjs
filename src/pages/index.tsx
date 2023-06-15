@@ -7,6 +7,7 @@ import { Spinner } from "../components/spinner/spinner";
 import FolderSection from "../components/folder/folder-section";
 import { Landing } from "../components/landing/landing";
 
+
 const Home: NextPage = (props) => {
   const { data: session, status } = useSession();
 
