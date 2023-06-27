@@ -25,12 +25,7 @@ const MyApp: AppType<{ session: Session | null }> = ({
 }) => {
   return (
     <SessionProvider session={session}>
-      <Script
-        src="https://www.chatbotic.co/widget.min.js"
-        id="lCcIAiaxhAevojS68sC5t"
-        data-url="https://www.chatbotic.co"
-        defer
-      />
+
 
       <FolderProvider>
         <Layout>
